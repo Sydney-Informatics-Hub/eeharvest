@@ -74,3 +74,12 @@ def test_stretch_minmax_accepts_3_bands(ee_image, geom_aoi):
         )
         == 2
     )
+
+
+def test_stretch_minmax_accepts_one_band(ee_image, geom_aoi):
+    """
+    stretch_minmax: function returns a list of length 2 when one band
+    is provided
+    """
+    assert len(utils.stretch_minmax(ee_image, geom_aoi, ["SR_B1"], scale=100)) == 2
+    assert len(utils.stretch_minmax(ee_image, geom_aoi, ["SR_B1"], "sd")) == 2
