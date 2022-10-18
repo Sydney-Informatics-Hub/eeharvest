@@ -45,3 +45,32 @@ def test_get_bandinfo(ee_image):
     """
     bands = utils.get_bandinfo(ee_image)
     assert type(bands) is list
+
+
+def test_stretch_minmax_accepts_3_bands(ee_image, geom_aoi):
+    """
+    stretch_minmax: function returns a list of length 2 when three bands are
+    provided, and that it accepts the 'by' argument
+    """
+    assert (
+        len(
+            utils.stretch_minmax(
+                ee_image=ee_image,
+                region=geom_aoi,
+                bands=["SR_B1", "SR_B2", "SR_B3"],
+                by="percentile",
+            )
+        )
+        == 2
+    )
+    assert (
+        len(
+            utils.stretch_minmax(
+                ee_image=ee_image,
+                region=geom_aoi,
+                bands=["SR_B1", "SR_B2", "SR_B3"],
+                by="sd",
+            )
+        )
+        == 2
+    )
