@@ -18,3 +18,11 @@ def test_get_indices():
     Awesome Spectral Indices and prints them as a dict
     """
     assert type(utils.get_indices()) is dict
+
+
+def test_imageID_to_tifID(ee_imagecollection):
+    """
+    Test that the imageID_to_tifID function extracts image IDs from an
+    ee.ImageCollection and returns a list of names in .tif format
+    """
+    assert type(utils.imageID_to_tifID(ee_imagecollection)) is list
