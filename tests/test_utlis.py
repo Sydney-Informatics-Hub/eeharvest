@@ -26,3 +26,13 @@ def test_imageID_to_tifID(ee_imagecollection):
     ee.ImageCollection and returns a list of names in .tif format
     """
     assert type(utils.imageID_to_tifID(ee_imagecollection)) is list
+
+
+def test_validate_collection():
+    """
+    Test that the validate_collection function returns True if the collection
+    is valid and False if it is not
+    """
+    assert utils.validate_collection("LANDSAT/LC08/C02/T1_L2") is True
+    assert utils.validate_collection("MODIS/006/MCD43A4") is True
+    assert utils.validate_collection("NOT/A/COLLECTION") is False
