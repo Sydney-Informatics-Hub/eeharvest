@@ -36,3 +36,12 @@ def test_validate_collection():
     assert utils.validate_collection("LANDSAT/LC08/C02/T1_L2") is True
     assert utils.validate_collection("MODIS/006/MCD43A4") is True
     assert utils.validate_collection("NOT/A/COLLECTION") is False
+
+
+def test_get_bandinfo(ee_image):
+    """
+    Test that the get_bandinfo function returns a list of band names when run
+    on an ee.ImageCollection or ee.Image object
+    """
+    bands = utils.get_bandinfo(ee_image)
+    assert type(bands) is list
