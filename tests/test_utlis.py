@@ -104,3 +104,11 @@ def test_stretch_minmax_accepts_None_for_bands_argument(ee_image, geom_aoi):
     """
     # No bands provided i.e. bands=False
     assert len(utils.stretch_minmax(ee_image, geom_aoi, False)) == 2
+
+
+def test_make_path_generates_string():
+    """
+    Test that the make_path function returns a string, and that it generates
+    paths properly
+    """
+    assert type(utils.make_path("folder", "filename")) is str
