@@ -112,3 +112,9 @@ def test_make_path_generates_string():
     paths properly
     """
     assert type(utils.make_path("folder", "filename")) is str
+
+
+def test_make_path_generates_proper_pathnames():
+    assert utils.make_path("folder", "filename") == "folder/filename"
+    assert utils.make_path(None, "filename") == "filename"
+    assert utils.make_path("folder", None) == "folder"
