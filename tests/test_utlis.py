@@ -96,3 +96,11 @@ def test_stretch_minmax_produces_exception_if_not_1_or_3_bands_provided(
     with pytest.raises(IndexError) as excinfo:
         utils.stretch_minmax(ee_image, geom_aoi, ["SR_B1", "SR_B2"])
     assert "list index out of range" in str(excinfo.value)
+
+
+def test_stretch_minmax_accepts_None_for_bands_argument(ee_image, geom_aoi):
+    """
+    :stretch_minmax: function accepts False for the bands argument
+    """
+    # No bands provided i.e. bands=False
+    assert len(utils.stretch_minmax(ee_image, geom_aoi, False)) == 2
