@@ -118,3 +118,31 @@ def test_make_path_generates_proper_pathnames():
     assert utils.make_path("folder", "filename") == "folder/filename"
     assert utils.make_path(None, "filename") == "filename"
     assert utils.make_path("folder", None) == "folder"
+
+
+def test_generate_path_string(ee_image):
+    """
+    Test that the generate_path_string function returns a string, and that it
+    generates paths properly
+    """
+    path = utils.generate_path_string(
+        ee_image=ee_image,
+        name="test",
+        date="20221011",
+        bands=["B1", "B2"],
+        reduce="mean",
+        scale="100",
+    )
+    assert type(path) is str
+    assert path == "ee_tes_20221011_B1B2_mean_100m.tif"
+
+    path = utils.generate_path_string(
+        ee_image=ee_image,
+        name="test",
+        date="20221011",
+        bands=None,
+        reduce=None,
+        scale=None,
+    )
+    assert type(path) is str
+    assert path == "ee_tes_20221011.tif"
