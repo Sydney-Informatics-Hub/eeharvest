@@ -146,3 +146,13 @@ def test_generate_path_string(ee_image):
     )
     assert type(path) is str
     assert path == "ee_tes_20221011.tif"
+
+
+def test_generate_dir(tmpdir):
+    """
+    Test that the generate_dir function creates a directory if it does not
+    exist, and returns the path to the directory
+    """
+    mydir = tmpdir.mkdir("monkey")
+    assert type(utils.generate_dir(str(mydir))) is str
+    assert type(utils.generate_dir(tmpdir, "data")) is str
