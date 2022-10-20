@@ -154,5 +154,10 @@ def test_generate_dir(tmpdir):
     exist, and returns the path to the directory
     """
     mydir = tmpdir.mkdir("monkey")
-    assert type(utils.generate_dir(str(mydir))) is str
-    assert type(utils.generate_dir(tmpdir, "data")) is str
+    dir1 = utils.generate_dir(str(mydir))
+    dir2 = utils.generate_dir(str(mydir), "data")
+    assert type(dir1) is str
+    assert type(dir2) is str
+    assert "monkey" in dir1
+    assert "monkey/data" in dir2
+
