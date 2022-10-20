@@ -55,14 +55,14 @@ class collect:
         self,
         collection=None,
         coords=None,
-        date=None,
-        end_date=None,
+        date_min=None,
+        date_max=None,
         buffer=None,
         bound=False,
         config=None,
     ):
         # Stop if minimum requirements are not met
-        if config is None and any(a is None for a in [collection, coords, date]):
+        if config is None and any(a is None for a in [collection, coords, date_min]):
             raise ValueError(
                 "Please supply either a path to a YAML file in 'config', or "
                 + "fill in all the required arguments for at least "
@@ -99,15 +99,15 @@ class collect:
                 gee_process["end_date"] = None
             use_gee_dates = False
             if gee_process["date"] is not None and gee_process["end_date"] is not None:
-                date = gee_process["date"]
-                end_date = gee_process["end_date"]
+                date_min = gee_process["date"]
+                date_max = gee_process["end_date"]
                 use_gee_dates = True
             elif gee_process["date"] is not None and gee_process["end_date"] is None:
                 # start = str(date[0]) + "-01-01"
                 # end_date = str(date[0]) + "-12-31"
                 # year_to_range = parse_year_to_range(gee_process["date"])
-                date = str(gee_process["date"][0]) + "-01-01"
-                end_date = str(gee_process["date"][0]) + "-12-31"
+                date_min = str(gee_process["date"][0]) + "-01-01"
+                date_max = str(gee_process["date"][0]) + "-12-31"
                 use_gee_dates = True
 
             if use_gee_dates is False:
@@ -116,8 +116,8 @@ class collect:
                 elif len(yaml_vals["target_dates"]) > 1:
                     print("Multiple dates provided, using first date for GEE")
 
-                date = str(yaml_vals["target_dates"][0]) + "-01-01"
-                end_date = str(yaml_vals["target_dates"][0]) + "-12-31"
+                date_min = str(yaml_vals["target_dates"][0]) + "-01-01"
+                date_max = str(yaml_vals["target_dates"][0]) + "-12-31"
 
             # Set GEE preprocessing attributes to None if not found so that the script
             # doesn't crash
@@ -132,10 +132,10 @@ class collect:
                 gee_process["bound"] = None
 
             # check dates
-            if isinstance(date, datetime.date):
-                date = date.strftime("%Y-%m-%d")
-            if isinstance(end_date, datetime.date):
-                end_date = end_date.strftime("%Y-%m-%d")
+            if isinstance(date_min, datetime.date):
+                date_min = date_min.strftime("%Y-%m-%d")
+            if isinstance(date_max, datetime.date):
+                date_max = date_max.strftime("%Y-%m-%d")
             # Ok, store method-specific settings
             self.yaml_vals = yaml_vals
             self.gee_config = gee_config
@@ -152,8 +152,8 @@ class collect:
         # Finalise
         self.collection = collection
         self.coords = coords
-        self.date = str(date)
-        self.end_date = str(end_date)
+        self.date = str(date_min)
+        self.end_date = str(date_max)
         self.buffer = buffer
         self.bound = bound
 
