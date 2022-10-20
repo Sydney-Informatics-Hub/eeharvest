@@ -175,3 +175,19 @@ def test_download_tif_single_image(tmpdir, ee_image, coords, capsys):
     utils.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
     captured = capsys.readouterr()
     assert "already exists" in captured.out
+
+
+def test_download_tif_multiple_images(tmpdir, ee_imagecollection, coords):
+    """
+    Test that the download_tif function downloads multiple tif files. In this
+    instance, two files should be downloaded.
+    """
+    # Generate a temporary directory
+    mydir = tmpdir.mkdir("download")
+    # Download files
+    utils.download_tif(image=ee_imagecollection, region=coords, path=mydir, scale=100)
+    count = 0
+    for path in os.scandir(mydir):
+        if path.is_file():
+            count += 1
+    assert count == 2
