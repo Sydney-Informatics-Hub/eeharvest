@@ -1,4 +1,5 @@
-import ee
+import os
+
 import pytest
 
 from eeharvest import utils
@@ -161,3 +162,16 @@ def test_generate_dir(tmpdir):
     assert "monkey" in dir1
     assert "monkey/data" in dir2
 
+
+def test_download_tif_single_image(tmpdir, ee_image, coords, capsys):
+    """Test that the download_tif function downloads a single tif file"""
+    # Generate a temporary directory
+    mydir = tmpdir.mkdir("download")
+    mypath = os.path.join(mydir + ".tif")
+    # Download file
+    utils.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
+    assert os.path.isfile(mypath) is True
+    # Skip if file has already been downloaded
+    utils.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
+    captured = capsys.readouterr()
+    assert "already exists" in captured.out
