@@ -46,3 +46,27 @@ target_sources:
     captured = capsys.readouterr()
     assert "Unexpected element" in captured.out
     assert "missing" in captured.out
+
+
+def test_validate_schema_can_identify_incorrect_key_value(capsys, data_path):
+    """
+    Test that an error is raised when there when an incorrect key value is used
+    in the config file
+    """
+    raw = """
+target_res: 6
+date_min: 2022-10-01
+target_sources:
+  GEE:
+    preprocess:
+      collection: LANDSAT/LC09/C02/T1_L2
+      mask_clouds: True
+      reduce: median
+    download:
+      bands: null
+    """
+    configfile = yaml.load(raw, Loader=yaml.FullLoader)
+    schemafile = data_path.joinpath("schema.yaml")
+    settings.validate_schema(configfile, schemafile)
+    captured = capsys.readouterr()
+    assert "'None' is not a str" in captured.out
