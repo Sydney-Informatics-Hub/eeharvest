@@ -1,3 +1,5 @@
+import yaml
+
 from eeharvest import settings
 
 
@@ -19,3 +21,28 @@ def test_validate_schema_validates_error_free_file_with_schema_file(capsys, data
     settings.validate_schema(configfile, schemafile)
     captured = capsys.readouterr()
     assert "validated" in captured.out
+
+
+def test_validate_schema_validates_string_with_schema_file(capsys, data_path):
+    """
+    validate_schema: should validate a string with a schema file and properly
+    identify an error when a wrong key is provided
+    """
+    raw = """
+target_res: 6
+date_min: 2022-10-01
+target_sources:
+  GEE:
+    preprocess:
+      collection: LANDSAT/LC09/C02/T1_L2
+      mask_clouds: True
+      reduce: median
+    download:
+      hands: NDVI
+    """
+    configfile = yaml.load(raw, Loader=yaml.FullLoader)
+    schemafile = data_path.joinpath("schema.yaml")
+    settings.validate_schema(configfile, schemafile)
+    captured = capsys.readouterr()
+    assert "Unexpected element" in captured.out
+    assert "missing" in captured.out
