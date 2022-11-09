@@ -1,3 +1,5 @@
+from importlib.resources import files
+
 import yamale
 import yaml
 
@@ -11,20 +13,21 @@ def read(path, loader=yaml.FullLoader):
     return doc
 
 
-def validate_schema(yaml):
+def validate_schema(path, schema_path=None):
     """Validate a yaml config file against a schema file"""
-    schema = yamale.make_schema("configs/schema.yaml")
-
+    if schema_path is None:
+        schema_path = files("eeharvest.data").joinpath("schema.yaml")
+    schema = yamale.make_schema(schema_path)
     try:
-        data = yamale.make_data(yaml)
+        data = yamale.make_data(path)
     except (FileNotFoundError, TypeError):
-        yaml = yaml.dump(yaml)
-        data = yamale.make_data(content=str(yaml))
+        path = yaml.dump(path)
+        data = yamale.make_data(content=str(path))
     try:
         yamale.validate(schema, data)
         msg.success("YAML schema validated 👍")
     except yamale.YamaleError as e:
         for result in e.results:
-            print(f"Error validating {result.data}")
+            msg.err("Error validating YAML config")
             for error in result.errors:
-                msg.err("\t%s" % error)
+                msg.info(f"\t{error}")
