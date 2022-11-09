@@ -37,10 +37,10 @@ target_sources:
     preprocess:
       collection: str()
       buffer: any(int(), null(), required=False)
-      bound: any(bool(), null())
+      bound: any(bool(), null(), required=False)
       mask_clouds: bool()
-      mask_probability: null()
+      mask_probability: any(null(), required=False)
       reduce: enum("median", "mean", "mode", "min", "max", "sum", "stdDev")
-      spectral: any(str(), null())
+      spectral: any(str(), null(), required=False)
     download:
       bands: str()
