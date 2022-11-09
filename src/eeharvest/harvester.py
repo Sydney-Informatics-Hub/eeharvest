@@ -64,9 +64,7 @@ class collect:
         # Stop if minimum requirements are not met
         if config is None and any(a is None for a in [collection, coords, date_min]):
             raise ValueError(
-                "Please supply either a path to a YAML file in 'config', or "
-                + "fill in all the required arguments for at least "
-                + "'collection', 'coords' and 'date'"
+                "Missing required argument(s): collection, coords, date_min"
             )
         elif config is not None:
             # Open and aggregate configuration settings into groups
@@ -125,7 +123,6 @@ class collect:
                 gee_process["buffer"]
             except KeyError:
                 gee_process["buffer"] = None
-
             try:
                 gee_process["bound"]
             except KeyError:
