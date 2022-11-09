@@ -13,7 +13,7 @@ def read(path, loader=yaml.FullLoader):
 
 def validate_schema(yaml):
     """Validate a yaml config file against a schema file"""
-    schema = yamale.make_schema("../configs/schema.yaml")
+    schema = yamale.make_schema("configs/schema.yaml")
 
     try:
         data = yamale.make_data(yaml)
