@@ -1,0 +1,20 @@
+# infile: ../testdata/Pointdata_Llara.csv
+outpath: ../../dataresults/
+colname_lat: Lat
+colname_lng: Long
+target_bbox: null
+target_res: 100
+date_min: 2022-10-01
+date_max: 2022-11-30
+target_sources:
+  GEE:
+    preprocess:
+      collection: LANDSAT/LC09/C02/T1_L2
+      buffer: null
+      bound: null
+      mask_clouds: True
+      mask_probability: null
+      reduce: median
+      spectral: NDVI
+    download:
+      bands: NDVI
