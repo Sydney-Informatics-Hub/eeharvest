@@ -1,0 +1,46 @@
+# DO NOT USE AS A CONFIGURATION FILE
+#
+# Use this file to define the schema for your config file
+# Package used: yamale
+#
+# For full documentation, see: https://github.com/23andMe/Yamale#validators
+#
+# Types available:
+#     - str(): strings
+#     - regex(): strings against a regex
+#     - int(): integers
+#     - num(): floats/numbers
+#     - bool(): True/False
+#     - day(): YYYY-MM-DD
+#     - list(): losts
+#     - map(): maps; only values are checked, not keys
+#     - ip(): IPv4 and IPv6 addresses
+#     - mac(): MAC addresses
+#     - dict(): dictionaries
+#     - null(): None
+#
+#   For multiple types, use:
+#     - enum([primitives]): specify constants, e.g. enum('a string', 1, False)
+#     - any(): allow one type ONLY, e.g. any(str(), int(), null())
+#     - subset(): allow multiple types in a list, e.g. subset(str(), int())
+
+infile: any(str(), null(), required=False)
+outpath: any(str(), null(), required=False)
+colname_lat: any(str(), null(), required=False)
+colname_lng: any(str(), null(), required=False)
+target_bbox: any(list(), null(), required=False)
+target_res: num(min=1)
+date_min: any(day(), int())
+date_max: any(day(), int(), required=False)
+target_sources:
+  GEE:
+    preprocess:
+      collection: str()
+      buffer: any(int(), null(), required=False)
+      bound: any(bool(), null(), required=False)
+      mask_clouds: bool()
+      mask_probability: any(null(), required=False)
+      reduce: enum("median", "mean", "mode", "min", "max", "sum", "stdDev")
+      spectral: any(str(), null(), required=False)
+    download:
+      bands: str()
