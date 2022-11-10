@@ -33,3 +33,16 @@ def test_collect_works_with_minimum_args():
         )
     except Exception as e:
         assert False, f"'collect' raised an exception {e}"
+
+
+def test_collect_indexing_works():
+    img = harvester.collect(
+        collection="LANDSAT/LC08/C02/T1_L2",
+        coords=[149.799, -30.31, 149.80, -30.309],
+        date_min="2019-01-01",
+        date_max="2019-02-01",
+    )
+    assert img.collection == "LANDSAT/LC08/C02/T1_L2"
+    assert img.coords == [149.799, -30.31, 149.80, -30.309]
+    assert img.date_min == "2019-01-01"
+    assert img.date_max == "2019-02-01"
