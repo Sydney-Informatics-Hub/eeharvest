@@ -12,6 +12,12 @@ import pytest
 
 
 @pytest.fixture(scope="session", autouse=True)
+def data_path():
+    """Fixture for the data path"""
+    return Path(__file__).parent.joinpath("data")
+
+
+@pytest.fixture(scope="session", autouse=True)
 def coords():
     """Fixture for a set of coordinates"""
     return [149.769345, -30.335861, 149.809173, -30.296271]
