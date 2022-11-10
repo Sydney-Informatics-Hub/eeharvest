@@ -20,9 +20,9 @@ def info(message, icon=True, log=False):
     if log:
         logging.info(message)
     if icon:
-        cprint("\u2139 " + message, color="magenta")
+        cprint("\u2139 " + message.lstrip(), color="magenta")
     else:
-        cprint("  " + message, color="magenta")
+        cprint("  " + message.lstrip(), color="magenta")
 
 
 def dl(message, log=False):
@@ -43,7 +43,7 @@ def err(message, log=False):
     """Prints a custom error message"""
     if log:
         logging.error(message)
-    cprint("\u2716 " + message, color="red", attrs=["bold"])
+    cprint("\u2716 " + message.lstrip(), color="red", attrs=["bold"])
 
 
 def success(message, log=False):
