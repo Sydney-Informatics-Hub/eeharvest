@@ -23,7 +23,7 @@ def data_path():
 @pytest.fixture(scope="session", autouse=True)
 def coords():
     """Fixture for a set of coordinates"""
-    return [149.769345, -30.335861, 149.809173, -30.296271]
+    return [149.799, -30.31, 149.80, -30.309]
 
 
 @pytest.fixture(scope="session", autouse=True)
