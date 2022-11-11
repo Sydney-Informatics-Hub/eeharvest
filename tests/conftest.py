@@ -7,6 +7,9 @@
     - https://docs.pytest.org/en/stable/writing_plugins.html
 """
 
+
+from pathlib import Path
+
 import ee
 import pytest
 
