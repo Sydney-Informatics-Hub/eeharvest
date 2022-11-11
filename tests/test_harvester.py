@@ -61,3 +61,17 @@ def test_preprocess():
     assert img.reduce == "median"
     assert img.spectral is None
     assert img.image_count == 1
+
+
+def test_map(capsys):
+    """collect.map: should not produce errors"""
+    img = harvester.collect(
+        collection="LANDSAT/LC08/C02/T1_L2",
+        coords=[149.799, -30.31, 149.80, -30.309],
+        date_min="2019-01-01",
+        date_max="2019-02-01",
+    )
+    img.preprocess(mask_clouds=True, reduce="median", spectral="NDVI", clip=True)
+    img.map(bands="NDVI")
+    captured = capsys.readouterr()
+    assert "Map generated" in captured.out
