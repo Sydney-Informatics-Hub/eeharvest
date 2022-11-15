@@ -86,37 +86,6 @@ class collect:
             if coords is not None:
                 coords = yaml_process["coords"]
 
-            # If date and endate are provided, overwrite everything
-            try:
-                gee_process["date"]
-            except KeyError:
-                gee_process["date"] = None
-            try:
-                gee_process["end_date"]
-            except KeyError:
-                gee_process["end_date"] = None
-            use_gee_dates = False
-            if gee_process["date"] is not None and gee_process["end_date"] is not None:
-                date_min = gee_process["date"]
-                date_max = gee_process["end_date"]
-                use_gee_dates = True
-            elif gee_process["date"] is not None and gee_process["end_date"] is None:
-                # start = str(date[0]) + "-01-01"
-                # end_date = str(date[0]) + "-12-31"
-                # year_to_range = parse_year_to_range(gee_process["date"])
-                date_min = str(gee_process["date"][0]) + "-01-01"
-                date_max = str(gee_process["date"][0]) + "-12-31"
-                use_gee_dates = True
-
-            if use_gee_dates is False:
-                if len(yaml_vals["target_dates"]) == 1:
-                    pass
-                elif len(yaml_vals["target_dates"]) > 1:
-                    print("Multiple dates provided, using first date for GEE")
-
-                date_min = str(yaml_vals["target_dates"][0]) + "-01-01"
-                date_max = str(yaml_vals["target_dates"][0]) + "-12-31"
-
             # Set GEE preprocessing attributes to None if not found so that the script
             # doesn't crash
             try:
