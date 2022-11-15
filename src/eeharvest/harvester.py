@@ -18,9 +18,6 @@ class collect:
 
     Attributes
     ----------
-    config: str
-        Path string to a YAML configuration file. A default configuration file
-        can be generated for editing using `template()` method.
     collection: str
         A Google Earth Engine collection. Collections can be found on
         https://developers.google.com/earth-engine/datasets
@@ -38,6 +35,9 @@ class collect:
     bound : bool, optional
         Instead of a circular buffer, request a square bounding box around the
         point based on the buffer size
+    config: str
+        Path string to a YAML configuration file. A default configuration file
+        can be generated for editing using `template()` method.
 
     Methods
     -------
