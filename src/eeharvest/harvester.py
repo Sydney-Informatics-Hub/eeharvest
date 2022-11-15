@@ -73,18 +73,18 @@ class collect:
                 yaml_vals = yaml.load(f, Loader=yaml.SafeLoader)
 
             # Parse settings
-            gee_config = yaml_vals["target_sources"]["GEE"]
-            gee_process = gee_config["preprocess"]
+            yaml_GEE = yaml_vals["target_sources"]["GEE"]
+            yaml_process = yaml_GEE["preprocess"]
             try:
-                gee_aggregate = gee_config["aggregate"]
+                gee_aggregate = yaml_GEE["aggregate"]
             except KeyError:
                 pass
-            gee_download = gee_config["download"]
+            yaml_download = yaml_GEE["download"]
 
             # Class attributes:
-            collection = gee_process["collection"]
+            collection = yaml_process["collection"]
             if coords is not None:
-                coords = gee_process["coords"]
+                coords = yaml_process["coords"]
 
             # If date and endate are provided, overwrite everything
             try:
@@ -120,13 +120,13 @@ class collect:
             # Set GEE preprocessing attributes to None if not found so that the script
             # doesn't crash
             try:
-                gee_process["buffer"]
+                yaml_process["buffer"]
             except KeyError:
-                gee_process["buffer"] = None
+                yaml_process["buffer"] = None
             try:
-                gee_process["bound"]
+                yaml_process["bound"]
             except KeyError:
-                gee_process["bound"] = None
+                yaml_process["bound"] = None
 
             # check dates
             if isinstance(date_min, datetime.date):
@@ -135,13 +135,13 @@ class collect:
                 date_max = date_max.strftime("%Y-%m-%d")
             # Ok, store method-specific settings
             self.yaml_vals = yaml_vals
-            self.gee_config = gee_config
-            self.gee_process = gee_process
+            self.gee_config = yaml_GEE
+            self.gee_process = yaml_process
             try:
                 self.gee_aggregate = gee_aggregate
             except Exception:
                 pass
-            self.gee_download = gee_download
+            self.gee_download = yaml_download
 
         # check that collection exists in GEE catalog
         valid = utils.validate_collection(collection)
@@ -149,8 +149,8 @@ class collect:
         # Finalise
         self.collection = collection
         self.coords = coords
-        self.date = str(date_min)
-        self.end_date = str(date_max)
+        self.date_min = str(date_min)
+        self.date_max = str(date_max)
         self.buffer = buffer
         self.bound = bound
 
@@ -229,7 +229,7 @@ class collect:
             aoi = aoi.bounds()
         # Filter dates
         img = ee.ImageCollection(self.collection).filterBounds(aoi)
-        img = img.filterDate(self.date, self.end_date)
+        img = img.filterDate(self.date_min, self.date_max)
         # Check if there are any images by verifying that image bands exist
         # NOT WORKING
         try:
@@ -559,8 +559,8 @@ class collect:
         pathstring = utils.generate_path_string(
             img,
             self.collection,
-            self.date,
-            self.end_date,
+            self.date_min,
+            self.date_max,
             bands,
             self.reduce,
             scale,
