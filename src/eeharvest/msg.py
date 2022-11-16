@@ -25,6 +25,14 @@ def info(message, icon=True, log=False):
         cprint("  " + message.lstrip(), color="magenta")
 
 
+def title(message, log=False):
+    """Prints a custom title message"""
+    if log:
+        logging.info(message)
+        # u25cc?
+    cprint(message + " -----", color="cyan", attrs=["bold"])
+
+
 def dl(message, log=False):
     """Prints a custom downloading message"""
     if log:
