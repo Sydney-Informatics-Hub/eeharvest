@@ -382,7 +382,7 @@ def generate_dir(dir, subfolder=None):
 #     return "%s %s" % (s, size_name[i])
 
 
-def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=True):
+def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=False):
     """
     Download image to local folder as GeoTIFF
 
