@@ -1,12 +1,13 @@
-import datetime  # for date parsing, but check later if this is needed
+# import datetime  # for date parsing, but check later if this is needed
+import os
 
 import ee
+import eemont  # trunk-ignore(flake8/F401)
 import geemap.colormaps as cm
 import geemap.foliumap as geemap
-import yaml
 from termcolor import cprint
 
-from eeharvest import msg, utils
+from eeharvest import arc2meter, msg, settings, utils
 
 
 class collect:
@@ -61,78 +62,36 @@ class collect:
         bound=False,
         config=None,
     ):
-        # Stop if minimum requirements are not met
-        if config is None and any(a is None for a in [collection, coords, date_min]):
-            raise ValueError(
-                "Missing required argument(s): collection, coords, date_min"
-            )
-        elif config is not None:
-            # Open and aggregate configuration settings into groups
-            with open(config, "r") as f:
-                # TODO: put into kwargs at some point to clean this up
-                yaml_vals = yaml.load(f, Loader=yaml.SafeLoader)
-
-            # Parse settings
-            yaml_GEE = yaml_vals["target_sources"]["GEE"]
-            yaml_process = yaml_GEE["preprocess"]
-            try:
-                gee_aggregate = yaml_GEE["aggregate"]
-            except KeyError:
-                pass
-            yaml_download = yaml_GEE["download"]
-
-            # Class attributes:
-            collection = yaml_process["collection"]
-            if coords is not None:
-                coords = yaml_process["coords"]
-
-            # Set GEE preprocessing attributes to None if not found so that the script
-            # doesn't crash
-            try:
-                yaml_process["buffer"]
-            except KeyError:
-                yaml_process["buffer"] = None
-            try:
-                yaml_process["bound"]
-            except KeyError:
-                yaml_process["bound"] = None
-
-            # check dates
-            if isinstance(date_min, datetime.date):
-                date_min = date_min.strftime("%Y-%m-%d")
-            if isinstance(date_max, datetime.date):
-                date_max = date_max.strftime("%Y-%m-%d")
-            # Ok, store method-specific settings
-            self.yaml_vals = yaml_vals
-            self.gee_config = yaml_GEE
-            self.gee_process = yaml_process
-            try:
-                self.gee_aggregate = gee_aggregate
-            except Exception:
-                pass
-            self.gee_download = yaml_download
-
-        # check that collection exists in GEE catalog
-        valid = utils.validate_collection(collection)
-
-        # Finalise
-        self.collection = collection
-        self.coords = coords
-        self.date_min = str(date_min)
-        self.date_max = str(date_max)
-        self.buffer = buffer
-        self.bound = bound
-
-        # Used for checks:
+        # Check if config is a path to a file or a dictionary and read it
         if config is not None:
-            self.hasconfig = True
+            cfg = settings.read(config)
+            settings.validate_schema(config)
+            # TODO: below is probably not needed if we use dict.get()
+            cfg = settings.add_missing_keys(cfg)
+            self.config = cfg
+            return
         else:
-            self.hasconfig = False
-        self.ee_image = None
-        self.scale = None
-        self.minmax = None
-        self.image_count = 1
-        self.valid = valid
+            self.config = None
+            # check minimum requirements: if collection, coords, date_min are
+            # not None, pass, otherwise print the argument that is missing
+            if all(v is not None for v in [collection, coords, date_min]):
+                pass
+            else:
+                msg.err("Minimum required arguments are not met")
+                if collection is None:
+                    msg.info("'collection' should not be None")
+                if coords is None:
+                    msg.info("`coords` should not be None")
+                if date_min is None:
+                    msg.info("`date_min` should not be None")
+            # Save into class attributes
+            self.collection = collection
+            self.coords = coords
+            self.date_min = date_min
+            self.date_max = date_max
+            self.buffer = buffer
+            self.bound = bound
+            return
 
     def preprocess(
         self,
