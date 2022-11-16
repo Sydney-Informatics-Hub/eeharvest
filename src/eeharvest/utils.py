@@ -230,49 +230,49 @@ def make_path(dir, filename):
     return path
 
 
-def generate_path_string(
-    ee_image,
-    name,
-    date,
-    end_date=None,
-    bands=None,
-    reduce=None,
-    scale=None,
-    ext="tif",
-):
-    """
-    Generate a string to name a file or folder for Earth Engine downloads
-    """
-    # Clean colletion string
-    name = "".join(name.split("/")[0])[:3]
-    # Generate date string
-    try:
-        date = date.replace("-", "")
-    except (AttributeError, TypeError):
-        pass
-    try:
-        end_date = end_date.replace("-", "")
-    except (AttributeError, TypeError):
-        pass
-    # Generate band string
-    if bands is not None:
-        bands = "".join(str(i) for i in bands)
-        bands = bands.replace("_", "")
-    if scale is not None:
-        scale = "".join([str(scale), "m"])
-    if reduce is None:
-        reduce = ""
-    # The only difference is whether to add extension to string, or not
-    if isinstance(ee_image, ee.image.Image):
-        out = (
-            "_".join(filter(None, ["ee", name, date, end_date, bands, reduce, scale]))
-            + "."
-            + ext
-        )
-    else:
-        out = "_".join(filter(None, [name, date, end_date, bands, reduce, scale]))
+# def generate_path_string(
+#     ee_image,
+#     name,
+#     date,
+#     end_date=None,
+#     bands=None,
+#     reduce=None,
+#     scale=None,
+#     ext="tif",
+# ):
+#     """
+#     Generate a string to name a file or folder for Earth Engine downloads
+#     """
+#     # Clean colletion string
+#     name = "".join(name.split("/")[0])
+#     # Generate date string
+#     try:
+#         date = date.replace("-", "")
+#     except (AttributeError, TypeError):
+#         pass
+#     try:
+#         end_date = end_date.replace("-", "")
+#     except (AttributeError, TypeError):
+#         pass
+#     # Generate band string
+#     if bands is not None:
+#         bands = "".join(str(i) for i in bands)
+#         bands = bands.replace("_", "")
+#     if scale is not None:
+#         scale = "".join([str(scale), "m"])
+#     if reduce is None:
+#         reduce = ""
+#     # The only difference is whether to add extension to string, or not
+#     if isinstance(ee_image, ee.image.Image):
+#         out = (
+#             "_".join(filter(None, ["ee", name, date, end_date, bands, reduce, scale]))
+#             + "."
+#             + ext
+#         )
+#     else:
+#         out = "_".join(filter(None, [name, date, end_date, bands, reduce, scale]))
 
-    return out
+#     return out
 
 
 def generate_dir(dir, subfolder=None):
