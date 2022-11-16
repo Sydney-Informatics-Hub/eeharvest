@@ -3,10 +3,10 @@ import yaml
 from eeharvest import settings
 
 
-def test_read_config_works_and_can_be_indexed():
+def test_read_config_works_and_can_be_indexed(data_path):
     """Test that the config file can be read"""
     # configfile = files("eeharvest.data").joinpath("template.yaml")
-    configfile = "configs/template.yaml"
+    configfile = data_path.joinpath("template.yaml")
     config = settings.read(configfile)
     assert config is not None  # config exists
     assert config["colname_lat"] == "Lat"  # config can be indexed
@@ -70,3 +70,12 @@ target_sources:
     settings.validate_schema(configfile, schemafile)
     captured = capsys.readouterr()
     assert "'None' is not a str" in captured.out
+
+
+def test_add_missing_keys(data_path):
+    configfile = data_path.joinpath("template.yaml")
+    config = settings.read(configfile)
+    newconfig = settings.add_missing_keys(config)
+
+    assert newconfig["target_sources"]["GEE"]["preprocess"]["buffer"] is None
+    assert newconfig["target_sources"]["GEE"]["preprocess"]["bound"] is None
