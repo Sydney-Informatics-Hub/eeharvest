@@ -1,7 +1,5 @@
 import hashlib
 import json
-
-# import math
 import os
 import urllib
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
@@ -408,13 +406,13 @@ def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=False):
     if isinstance(image, ee.image.Image):
         filename = os.path.basename(path)
         # Check if path already exists and don't download if it does
-        if os.path.exists(path) and overwrite:
+        if os.path.exists(path) and overwrite is False:
             msg.warn(f"{filename} already exists, skipping download")
             return filename
         # Otherwise download image
         with suppress():
             # hide tqdm if disable=True
-            tqdm.__init__ = partialmethod(tqdm.__init__, disable=False)
+            tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
             # Get filename from path
 
             with msg.spin(f"Downloading {filename}") as s:
