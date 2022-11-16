@@ -31,3 +31,52 @@ def validate_schema(path, schema_path=None):
             msg.err("Error validating YAML config")
             for error in result.errors:
                 msg.info(f"\t{error}")
+
+
+def add_missing_keys(config):
+    """Check that the config file has the correct keys and add the keys with
+    valeus of None if they are missing"""
+    skeleton = {
+        "infile": None,
+        "outpath": None,
+        "colname_lat": None,
+        "colname_lng": None,
+        "target_bbox": None,
+        "target_res": None,
+        "date_min": None,
+        "date_max": None,
+        "target_sources": {
+            "GEE": {
+                "preprocess": {
+                    "collection": None,
+                    "buffer": None,
+                    "bound": None,
+                    "mask_clouds": None,
+                    "mask_probability": None,
+                    "reduce": None,
+                    "spectral": None,
+                },
+                "download": {"bands": None},
+            }
+        },
+    }
+
+    def merge(child, parent):
+        """For a config file, fill in blanks with defaults"""
+
+        d = {}
+        for k in set().union(parent, child):
+            if (
+                k in child
+                and isinstance(child[k], dict)
+                and isinstance(parent[k], dict)
+            ):
+                v = merge(child[k], parent[k])
+            elif k in child:
+                v = child[k]
+            else:
+                v = parent[k]
+            d[k] = v
+        return d
+
+    return merge(config, skeleton)
