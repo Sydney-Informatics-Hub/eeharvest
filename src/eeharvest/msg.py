@@ -44,7 +44,7 @@ def warn(message, log=False):
     """Prints a custom warning message"""
     if log:
         logging.warning(message)
-    cprint("\u2691 " + message, color="yellow")
+    cprint("\u2691 " + message, color="red")
 
 
 def err(message, log=False):
@@ -58,7 +58,7 @@ def success(message, log=False):
     """Prints a custom success message"""
     if log:
         logging.info(message)
-    cprint("\u2714 " + message, color="magenta")
+    cprint("\u2714 " + message, color="green")
 
 
 def spin(message=None, colour="magenta", events=1, log=False):
