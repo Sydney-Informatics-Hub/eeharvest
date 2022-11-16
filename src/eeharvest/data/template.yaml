@@ -3,7 +3,7 @@ outpath: ../../dataresults/
 colname_lat: Lat
 colname_lng: Long
 
-target_bbox: null
+target_bbox: [149.799, -30.31, 149.80, -30.309]
 target_res: 6
 date_min: 2022-10-01
 date_max: 2022-11-30
@@ -12,8 +12,6 @@ target_sources:
   GEE:
     preprocess:
       collection: LANDSAT/LC09/C02/T1_L2
-      buffer: null
-      bound: null
       mask_clouds: True
       mask_probability: null
       reduce: median

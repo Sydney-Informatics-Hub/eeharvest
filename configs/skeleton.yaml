@@ -1,0 +1,24 @@
+# This is a skeleton configuration file to include all possible keys. Values are
+# all set to null.
+infile: null
+outpath: null
+colname_lat: null
+colname_lng: null
+
+target_bbox: null
+target_res: null
+date_min: null
+date_max: null
+
+target_sources:
+  GEE:
+    preprocess:
+      collection: null
+      buffer: null
+      bound: null
+      mask_clouds: null
+      mask_probability: null
+      reduce: null
+      spectral: null
+    download:
+      bands: null
