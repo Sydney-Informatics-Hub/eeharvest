@@ -1,3 +1,4 @@
+import hashlib
 import json
 
 # import math
@@ -213,6 +214,11 @@ def stretch_minmax(
             minv = [values[bands[0]][0], values[bands[1]][0], values[bands[2]][0]]
             maxv = [values[bands[0]][1], values[bands[1]][1], values[bands[2]][1]]
     return [minv, maxv]
+
+
+def generate_hash(*args):
+    fullstring = "".join(map(str, args))
+    return hashlib.shake_128(fullstring.encode()).hexdigest(4)
 
 
 def make_path(dir, filename):
