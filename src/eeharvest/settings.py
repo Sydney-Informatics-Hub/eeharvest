@@ -1,13 +1,12 @@
-from importlib.resources import files
-
 import yamale
 import yaml
+from importlib_resources import files
 
 from eeharvest import msg
 
 
-def read(path, loader=yaml.FullLoader):
-    """Read the yaml config file"""
+def read(path, loader=yaml.SafeLoader):
+    """Read a yaml file and return a dict"""
     with open(path, "r") as f:
         doc = yaml.load(f, Loader=loader)
     return doc
@@ -17,7 +16,7 @@ def validate_schema(path, schema_path=None):
     """Validate a yaml config file against a schema file"""
     if schema_path is None:
         schema_path = files("eeharvest.data").joinpath("schema.yaml")
-    schema = yamale.make_schema(schema_path)
+    schema = yamale.make_schema(str(schema_path))
     try:
         data = yamale.make_data(path)
     except (FileNotFoundError, TypeError):
@@ -25,12 +24,10 @@ def validate_schema(path, schema_path=None):
         data = yamale.make_data(content=str(path))
     try:
         yamale.validate(schema, data)
-        msg.success("YAML schema validated 👍")
+        msg.success("YAML schema validated")
     except yamale.YamaleError as e:
-        for result in e.results:
-            msg.err("Error validating YAML config")
-            for error in result.errors:
-                msg.info(f"\t{error}")
+        msg.err(f"{type(e).__name__}" + f"{e}")
+        raise ValueError("Error validating config file against schema file")
 
 
 def add_missing_keys(config):
