@@ -272,10 +272,10 @@ class collect:
         """
         msg.title("Running map()")
         # Check that preprocess() has been called
-        img = self.ee_image
-        if img is None:
-            print("✘ No image found, please run `preprocess()` before mapping")
-            return None
+        try:
+            img = self.ee_image
+        except AttributeError:
+            raise AttributeError("No image found, please run `preprocess()`")
         # Validate that at least one band is selected
         all_bands = utils.get_bandinfo(img)
         if bands is None:
