@@ -96,6 +96,7 @@ class collect:
     def preprocess(
         self,
         mask_clouds=True,
+        mask_probability=60,
         reduce="median",
         spectral=None,
         clip=True,
@@ -139,139 +140,105 @@ class collect:
             An Earth Engine object which can be further manipulated should the
             user not choose to use other methods in the class.
         """
-        msg.info("Running preprocess()")
+        msg.title("Running preprocess()")
         # Check if user has provided a config file
-        if self.hasconfig is True:
-            mask_clouds = self.gee_process["mask_clouds"]
-            reduce = self.gee_process["reduce"]
-            spectral = self.gee_process["spectral"]
-        # Generate area of interest
-        if len(self.coords) == 4:
-            aoi = ee.Geometry.Rectangle(self.coords)
-        elif len(self.coords) == 2:
-            aoi = ee.Geometry.Point(self.coords)
-        # Is there a buffer? Is a point supplied? Then buffer it
-        if self.buffer is not None and len(self.coords) == 2:
-            aoi = aoi.buffer(self.buffer)
-        if self.bound is True and self.buffer is not None:
-            aoi = aoi.bounds()
-        # Filter dates
-        img = ee.ImageCollection(self.collection).filterBounds(aoi)
-        img = img.filterDate(self.date_min, self.date_max)
-        # Check if there are any images by verifying that image bands exist
-        # NOT WORKING
-        try:
-            img.first().bandNames().getInfo()
-        except ee.EEException:
-            cprint(
-                "✘ No images - please verify date range. Processing cancelled",
-                "red",
-                attrs=["bold"],
-            )
-        # Count images if reduce is None:
-        if reduce is False or reduce is None:
-            reduce = None
-            with msg.spin("Image collection requested, counting images...") as s:
-                image_count = int(img.size().getInfo())
-                if image_count > 0:
-                    self.image_count = image_count  # store for later use
-                else:
-                    cprint("✘ No images found, please check date range", "red")
-                    return None
-                s(1)
-        # Scale and offset, mask clouds
-        try:
-            img = img.scaleAndOffset()
-        except Exception:
-            pass
-        if mask_clouds:
-            try:
-                with msg.spin("Applying scale, offset and cloud masks...") as s:
-                    img = img.maskClouds()
-                    s(1)
-            except Exception:
-                pass
-        # Spectral index
-        if spectral is not None:
-            with msg.spin(f"Computing spectral index: {spectral}") as s:
-                try:
-                    # Validation: check if spectral index is supported
-                    full_list = list(utils.get_indices().keys())
-                    spectral_list = (
-                        [spectral] if isinstance(spectral, str) else spectral
-                    )
-                    if not set(spectral_list).issubset(full_list):
-                        raise Exception(
-                            cprint(
-                                "✘ At least one of your spectral indices is not valid. "
-                                "Please check the list of available indices at "
-                                "https://awesome-ee-spectral-indices.readthedocs.io"
-                                " Processing cancelled",
-                                "red",
-                                attrs=["bold"],
-                            )
-                        )
-                    img = img.spectralIndices(spectral, online=True)
-                except Exception:
-                    pass
-                s(1)
+        if self.config is None:
+            collection = self.collection
+            coords = self.coords
+            date_min = self.date_min
+            date_max = self.date_max
+            buffer = self.buffer
+            bound = self.bound
         else:
-            pass
-        # Function to map to collection
+            # Extract settings from config
+            cfg = self.config
+            gee_cfg = cfg["target_sources"]["GEE"]["preprocess"]
+            collection = gee_cfg["collection"]
+            coords = cfg["target_bbox"]
+            date_min = cfg["date_min"]
+            date_max = cfg["date_max"]
+            buffer = gee_cfg["buffer"]
+            bound = gee_cfg["bound"]
+            mask_clouds = gee_cfg["mask_clouds"]
+            reduce = gee_cfg["reduce"]
+            spectral = gee_cfg["spectral"]
+        # Let's start ----------------------------------------------------------
+        # Define the collection, and filter by aoi
+        aoi = ee.Geometry.Rectangle(coords)
+        img = (
+            ee.ImageCollection(collection)
+            .filterBounds(aoi)
+            .filterDate(str(date_min), str(date_max))
+        )
+        # Cloud and shadow masking
+        if mask_clouds:
+            with msg.spin("Applying scale, offset and cloud masks...") as s:
+                img = img.scaleAndOffset().maskClouds(prob=mask_probability)
+                s(1)
+        # Calculate spectral indices
+        if spectral is not None:
+            with msg.spin(f"Calculating spectral indices: {spectral}...") as s:
+                img = img.spectralIndices(spectral, online=True)
+                s(1)
 
-        def clip_collection(image):
-            return image.clip(aoi)
-
+        # Clip image to aoi
         if clip:
-            img = img.map(clip_collection)
-        # If image is an image collection, limit to 3 samples for stretching pixels
-        ee_sample = img.limit(3)
-        # Reduce/aggregate
+
+            def clip_all(image):
+                return image.clip(aoi)
+
+            img = img.map(clip_all)
+        # Reduce image collection
         reducers = ["median", "mean", "sum", "mode", "max", "min", "mosaic"]
         if reduce is None:
-            msg.info(f"Selected {image_count} image(s) without aggregation")
+            msg.info("Skipping image reduction")
         elif reduce in reducers:
             with msg.spin(f"Reducing image pixels by {reduce}") as s:
                 func = getattr(img, reduce)
                 img = func()
                 s(1)
-        # Update metadata (TODO: perhaps a better way to do this)
+        else:
+            raise ValueError(
+                f"Reducer {reduce} not supported, please use one of {reducers}"
+            )
+        # Store attributes
+        self.ee_image = img
+        self.collection = collection
         self.aoi = aoi
         self.reduce = reduce
         self.spectral = spectral
-        self.ee_sample = ee_sample
-        self.ee_image = img
-        msg.success("Google Earth Engine preprocessing complete")
+
+        msg.success("Preprocessing complete")
         return img
 
-    def aggregate(self, frequency="month", reduce_by=None, **kwargs):
-        """
-        Aggregate an Earth Engine Image or ImageCollection by period
+    # def aggregate(self, frequency="month", reduce_by=None, **kwargs):
+    #     """
+    #     Aggregate an Earth Engine Image or ImageCollection by period
 
-        Parameters
-        ----------
-        frequency : str, optional
-            aggregation frequency, either by "day". "week" or "month", by
-            default "month"
-        """
-        msg.info("Running aggregate()")
-        if reduce_by is None:
-            reducer = ee.Reducer.mean()
-        # Check if user has provided a config file
-        if self.hasconfig is True:
-            frequency = self.gee_aggregate["frequency"]
-            reduce_by = self.gee_aggregate["reduce_by"]
-            cprint(f"Using ee.Reducer.{reduce_by}", "yellow")
-        img = self.ee_image
-        # Convert to wxee object
-        ts = img.wx.to_time_series()
-        cprint("\u2139 Initial aggregate", "blue")
-        ts.describe()
-        out = ts.aggregate_time(frequency=frequency, reducer=reducer)
-        with msg.spin("Calculating new temporal aggregate...") as s:
-            out.describe()
-            s(1)
-        self.ee_image = out
+    #     Parameters
+    #     ----------
+    #     frequency : str, optional
+    #         aggregation frequency, either by "day". "week" or "month", by
+    #         default "month"
+    #     """
+    #     msg.title("Running aggregate()")
+    #     if reduce_by is None:
+    #         reducer = ee.Reducer.mean()
+    #     # Check if user has provided a config file
+    #     if self.hasconfig is True:
+    #         frequency = self.gee_aggregate["frequency"]
+    #         reduce_by = self.gee_aggregate["reduce_by"]
+    #         cprint(f"Using ee.Reducer.{reduce_by}", "yellow")
+    #     img = self.ee_image
+    #     # Convert to wxee object
+    #     ts = img.wx.to_time_series()
+    #     cprint("\u2139 Initial aggregate", "blue")
+    #     ts.describe()
+    #     out = ts.aggregate_time(frequency=frequency, reducer=reducer)
+    #     with msg.spin("Calculating new temporal aggregate...") as s:
+    #         out.describe()
+    #         s(1)
+    #     self.ee_image = out
 
     def map(self, bands=None, minmax=None, palette=None, save_to=None, **kwargs):
         """
@@ -303,7 +270,7 @@ class collect:
         ValueError
             If the bands are not valid or not present in the image.
         """
-        msg.info("Running map()")
+        msg.title("Running map()")
         # Check that preprocess() has been called
         img = self.ee_image
         if img is None:
@@ -330,23 +297,18 @@ class collect:
         bands = [bands] if isinstance(bands, str) else bands
         img = img.select(bands)
         # Check if geometry is a point and let user know
-        if self.aoi.getInfo()["type"] == "Point":
-            msg.warn(
-                "Looks like geometry is set to a single point with "
-                + "no buffer. Plotting anyway..."
-            )
+        # if self.aoi.getInfo()["type"] == "Point":
+        #     msg.warn(
+        #         "Looks like geometry is set to a single point with "
+        #         + "no buffer. Plotting anyway..."
+        #     )
         # Create min and max parameters for map
         if minmax is None:
             with msg.spin("Detecting band min and max parameters...") as s:
-                # Scale here is just for visualisation purposes
-                if len(bands) == 1:
-                    minmax = utils.stretch_minmax(
-                        self.ee_sample, self.aoi, bands, by="sd", scale=100
-                    )
-                elif len(bands) > 1:
-                    minmax = utils.stretch_minmax(
-                        self.ee_sample, self.aoi, bands, by="sd", scale=100
-                    )
+                # Scale here is just for visualisation purposes]
+                minmax = utils.stretch_minmax(
+                    self.ee_image, self.aoi, bands, by="sd", scale=100
+                )
                 s(1)
         param = dict(
             min=minmax[0],
@@ -371,7 +333,9 @@ class collect:
             if isinstance(img, ee.image.Image):
                 Map.addLayer(img, param, name=bands[0])
             else:
-                Map.add_time_slider(img, param, time_interval=3)
+                msg.info("Multiple images found, previewing first image only")
+                Map.addLayer(img.first(), param, name=bands[0])
+                # Map.add_time_slider(img, param, time_interval=3)
                 # Map.add_colorbar_branca(paramvis, label=bands[0],
                 #     transparent_bg=False)
         # Otherwise, generate map without palette
@@ -379,13 +343,14 @@ class collect:
             if isinstance(img, ee.image.Image):
                 Map.addLayer(img, param, name=str(bands).strip("[]"))
             else:
-                Map.add_time_slider(img, param, time_interval=3)
+                msg.info("Multiple images found, previewing first image only")
+                Map.addLayer(img.first(), param, name=str(bands).strip("[]"))
+                # Map.add_time_slider(img, param, time_interval=3)
         # Add bounding box
         # Map.addLayer(self.aoi, shown=False)
         # Update class attributes
-        self.bands = bands
         self.param = param
-        self.minmax = minmax
+        self.minmax = minmax  # for user if they want the values
         # For R preview to HTML
         if save_to is not None:
             # Save map html to temp directory
@@ -400,7 +365,6 @@ class collect:
         bands=None,
         scale=None,
         outpath=None,
-        out_format=None,
         overwrite=False,
         **kwargs,
     ):
@@ -437,73 +401,73 @@ class collect:
         ValueError
             If out_format is not one of 'png', 'jpg', 'tif'.
         """
-        msg.info("Running download()")
-        # Check if user has provided a config file
-        if self.hasconfig is True:
-            bands = self.gee_download["bands"]
-            scale = self.gee_download["scale"]
-            outpath = self.yaml_vals["outpath"]
-            out_format = self.gee_download["format"]
-            overwrite = self.gee_download["overwrite"]
-        # Check that preprocess() has been called
-        img = self.ee_image
-        if img is None:
-            msg.err("No image found, please run `preprocess()` before mapping")
-            return None
-        # Stop if image is a pixel
-        if self.aoi.getInfo()["type"] == "Point":
-            msg.warn("Single pixel selected. Did you set a buffer in `collect()`?")
-            msg.err("Download cancelled")
-            return
-        # Stop if out_format is not png, jpg or tif
-        if out_format is None:
-            # cprint(
-            #     "• `out_format` is set to None, downloading as GEOTIFF, 'tif'", "blue"
-            # )
-            out_format = "tif"
-        elif out_format not in ["png", "jpg", "tif"]:
-            raise ValueError("out_format must be one of 'png', 'jpg' or 'tif'")
-        # Validate that at least one band is selected
-        if bands is None:
-            try:
-                bands = self.bands
-            except AttributeError:
-                all_bands = utils.get_bandinfo(img)
-                msg.err("No bands defined")
-                msg.info("Please select one or more bands to download image:")
-                print(all_bands)
-                return None
-        img = img.select(bands)
-        msg.info(f"Band(s) selected: {bands}")
-        # Throw error if scale is None, i.e. force user to set scale again
-        if scale is None:
-            msg.warn("Scale not set, using scale=100")
-            scale = 100
-        # Determine save path
-        if outpath is None:
-            outpath = utils.generate_dir("downloads")
+        msg.title("Running download()")
+        # Check config file
+        if self.config is not None:
+            # Extract settings from config
+            cfg = self.config
+            gee_cfg = cfg["target_sources"]["GEE"]
+            collection = gee_cfg["preprocess"]["collection"]
+            date_min = cfg["date_min"]
+            date_max = cfg["date_max"]
+            reduce = gee_cfg["preprocess"]["reduce"]
+            coords = cfg["target_bbox"]
+            bands = cfg["target_sources"]["GEE"]["download"]["bands"]
+            scale = cfg["target_res"]
+            # If outpath is None, check if it's set in the config. If not, use
+            # default location of `downloads` folder in working directory
+            if outpath is not None:
+                pass
+            elif cfg["outpath"] is not None:
+                outpath = cfg["outpath"]
+            else:
+                outpath = os.path.join(os.getcwd(), "downloads")
         else:
-            outpath = utils.generate_dir(outpath)
-        pathstring = utils.generate_path_string(
-            img,
-            self.collection,
-            self.date_min,
-            self.date_max,
-            bands,
-            self.reduce,
-            scale,
-            out_format,
+            collection = self.collection
+            date_min = self.date_min
+            date_max = self.date_max
+        # These should already be stored in the class
+        try:
+            img = self.ee_image
+        except AttributeError:
+            msg.err("No image found, please run `preprocess()` before downloading")
+        aoi = self.aoi
+        reduce = self.reduce
+        # Check if bands are set
+        if bands is None:
+            all_bands = utils.get_bandinfo(img)
+            msg.err("No bands defined")
+            msg.info("Please select one or more bands to download image:")
+            msg.info(str(all_bands))
+            return
+        else:
+            img = img.select(bands)
+            msg.info(f"Band(s) selected: {bands}")
+
+        # Convert scale from arsec to meters (if from config file)
+        if cfg is not None:
+            lat_center = (coords[1] + coords[3]) / 2
+            xres_meters, yres_meters = arc2meter.calc_arc2meter(scale, lat_center)
+            msg.info(
+                f"Setting scale to ~{xres_meters:.1f}m, converted from "
+                + f"{scale} arcsec at latitude {lat_center:.2f}"
+            )
+            scale = round(xres_meters, 1)
+
+        # Use attributes to generate filename hash
+        hash = utils.generate_hash(collection, date_min, date_max, bands, reduce, scale)
+        filename = f"ee_{''.join(collection.split('/')[0])}_{hash}.tif"
+
+        # Generate path string
+        final_destination = os.path.join(utils.generate_dir(outpath), filename)
+        msg.info(f"Setting download dir to {outpath}")
+        filenames = utils.download_tif(
+            img, aoi, final_destination, scale, overwrite=overwrite
         )
-        fullpath = utils.make_path(outpath, pathstring)
-        # Download file(s)
-        is_tif = out_format.replace(".", "").lower() in ["tif", "tiff"]
-        # cprint(f"• Downloading to {outpath}...", "blue")
-        if is_tif:
-            filenames = utils.download_tif(img, self.aoi, fullpath, scale, overwrite)
-            self.filenames = filenames
-        self.outpath = outpath
         msg.success("Google Earth Engine download(s) complete")
-        return None
+        # Housekeeping
+        self.filenames = filenames
+        return img
 
 
 def byconfig(obj, **kwargs):
