@@ -21,4 +21,6 @@ def initialise(auth_mode="gcloud"):
         if ee.data._credentials:
             msg.success("Earth Engine authenticated")
         else:
-            msg.warn("Please run this function again to authenticate")
+            msg.warn(
+                "Something went wrong, please run `initialise()` again to authenticate"
+            )
