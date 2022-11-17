@@ -470,20 +470,10 @@ class collect:
         return img
 
 
-def byconfig(obj, **kwargs):
-    """
-    Preprocess, aggregate and download Earth Engine assets by config file
-    """
-    # TODO: Validate that config file is present
-    if obj.hasconfig is False:
-        raise Exception("This function requires a config file supplied in `collect()`")
-    # Replace coordinates if needed
-    if kwargs["coords"] is not None:
-        obj.coords = kwargs["coords"]
-    obj.preprocess()
-    # try:
-    #     obj.aggregate()
-    # except Exception as e:
-    #     print(e)
-    obj.download()
-    return obj
+def auto(config):
+    """Run all steps of the GEE download process when a configuration YAML file
+    is supplied."""
+    img = collect(config=config)
+    img.preprocess()
+    img.download()
+    return img
