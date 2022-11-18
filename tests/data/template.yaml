@@ -1,5 +1,5 @@
 infile: ../testdata/Pointdata_Llara.csv
-outpath: ../../dataresults/
+outpath: results/
 colname_lat: Lat
 colname_lng: Long
 
@@ -15,6 +15,6 @@ target_sources:
       mask_clouds: True
       mask_probability: null
       reduce: median
-      spectral: null
+      spectral: NDVI
     download:
       bands: NDVI
