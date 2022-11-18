@@ -470,10 +470,13 @@ class collect:
         return img
 
 
-def auto(config):
+def auto(config, outpath=None):
     """Run all steps of the GEE download process when a configuration YAML file
     is supplied."""
     img = collect(config=config)
     img.preprocess()
-    img.download()
+    if outpath is None:
+        img.download()
+    else:
+        img.download(outpath=outpath)
     return img
