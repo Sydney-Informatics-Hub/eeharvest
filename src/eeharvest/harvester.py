@@ -445,7 +445,9 @@ class collect:
             msg.info(f"Band(s) selected: {bands}")
 
         # Convert scale from arsec to meters (if from config file)
-        if cfg is not None:
+        if cfg is None:
+            pass
+        else:
             lat_center = (coords[1] + coords[3]) / 2
             xres_meters, yres_meters = arc2meter.calc_arc2meter(scale, lat_center)
             msg.info(
