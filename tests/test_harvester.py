@@ -68,41 +68,44 @@ def test_collect_works_with_minimum_args_provided():
     assert img.collection == "LANDSAT/LC08/C02/T1_L2"
 
 
-def test_collect_indexing_works():
-    img = harvester.collect(
-        collection="LANDSAT/LC08/C02/T1_L2",
-        coords=[149.799, -30.31, 149.80, -30.309],
-        date_min="2019-01-01",
-        date_max="2019-02-01",
-    )
-    assert img.collection == "LANDSAT/LC08/C02/T1_L2"
-    assert img.coords == [149.799, -30.31, 149.80, -30.309]
-    assert img.date_min == "2019-01-01"
-    assert img.date_max == "2019-02-01"
+def test_collect_indexing_works(to_harvest):
+    """
+    Once the collect class method is called, the class should be indexable
+    for the following attributes: collection, coords, date_min, date_max
+    """
+    auth.initialise()
+    assert to_harvest.collection == "LANDSAT/LC08/C02/T1_L2"
+    assert to_harvest.coords == [149.799, -30.31, 149.80, -30.309]
+    assert to_harvest.date_min == "2019-01-01"
+    assert to_harvest.date_max == "2019-02-01"
 
 
-def test_preprocess():
-    img = harvester.collect(
-        collection="LANDSAT/LC08/C02/T1_L2",
-        coords=[149.799, -30.31, 149.80, -30.309],
-        date_min="2019-01-01",
-        date_max="2019-02-01",
-    )
-    img.preprocess(mask_clouds=True, reduce="median", spectral=None, clip=True)
-    assert img.reduce == "median"
-    assert img.spectral is None
-    assert img.image_count == 1
+def test_preprocess(to_harvest):
+    auth.initialise()
+    to_harvest.preprocess(mask_clouds=True, reduce="median", spectral=None, clip=True)
+    assert to_harvest.reduce == "median"
+    assert to_harvest.spectral is None
+
+    to_harvest.preprocess(mask_clouds=False, reduce=None, spectral="NDVI", clip=False)
+    assert to_harvest.spectral == "NDVI"
 
 
-def test_map(capsys):
+def test_map(capsys, to_harvest):
     """collect.map: should not produce errors"""
-    img = harvester.collect(
-        collection="LANDSAT/LC08/C02/T1_L2",
-        coords=[149.799, -30.31, 149.80, -30.309],
-        date_min="2019-01-01",
-        date_max="2019-02-01",
-    )
-    img.preprocess(mask_clouds=True, reduce="median", spectral="NDVI", clip=True)
-    img.map(bands="NDVI")
+    auth.initialise()
+    to_harvest.preprocess(mask_clouds=True, reduce="median", spectral="NDVI", clip=True)
+    to_harvest.map(bands="NDVI")
     captured = capsys.readouterr()
     assert "Map generated" in captured.out
+
+    to_harvest.map(bands=None)
+    captured = capsys.readouterr()
+    assert "nothing to preview" in captured.out
+
+    to_harvest.map(bands="NDVI", palette="ndvi")
+    captured = capsys.readouterr()
+    assert "Map generated" in captured.out
+
+    with pytest.raises(ValueError) as excinfo:
+        to_harvest.preprocess(reduce="monkey")
+    assert "not supported" in str(excinfo.value)
