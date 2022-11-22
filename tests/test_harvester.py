@@ -109,3 +109,30 @@ def test_map(capsys, to_harvest):
     with pytest.raises(ValueError) as excinfo:
         to_harvest.preprocess(reduce="monkey")
     assert "not supported" in str(excinfo.value)
+
+
+def test_map_works_with_imagecollection(capsys, to_harvest):
+    """collect.map: should work with multiple image in an ImageCollection"""
+    auth.initialise()
+    to_harvest.preprocess(mask_clouds=True, reduce=None, spectral="NDVI", clip=True)
+    to_harvest.map(bands="NDVI")
+    captured = capsys.readouterr()
+    assert "previewing first image only" in captured.out
+
+
+def test_config_works_with_harvester_module(tmp_path):
+    """collect: should work with a config file supplied"""
+    auth.initialise()
+    img = harvester.collect(config="tests/data/template.yaml")
+    assert type(img.config) is dict
+
+    img.preprocess()
+    assert img.reduce == "median"
+
+    img.download(outpath=tmp_path)
+    tif_exists = False
+    for root, dirs, files in os.walk(tmp_path):
+        for file in files:
+            if file.endswith(".tif"):
+                tif_exists = True
+    assert tif_exists is True
