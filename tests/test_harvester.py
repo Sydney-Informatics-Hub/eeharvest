@@ -143,3 +143,15 @@ def test_map_requires_preprocess_to_run_first(to_harvest):
     with pytest.raises(AttributeError) as excinfo:
         to_harvest.map(bands=["B1", "B2", "B3"])
     assert "No image found" in str(excinfo.value)
+
+
+def test_auto_just_works(tmp_path):
+    img = harvester.auto(config="tests/data/template.yaml", outpath=tmp_path)
+    assert type(img) is harvester.collect
+
+    tif_exists = False
+    for root, dirs, files in os.walk(tmp_path):
+        for file in files:
+            if file.endswith(".tif"):
+                tif_exists = True
+    assert tif_exists is True
