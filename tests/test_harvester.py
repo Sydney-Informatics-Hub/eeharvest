@@ -136,3 +136,10 @@ def test_config_works_with_harvester_module(tmp_path):
             if file.endswith(".tif"):
                 tif_exists = True
     assert tif_exists is True
+
+
+def test_map_requires_preprocess_to_run_first(to_harvest):
+    """map: will not produce image if preprocess() has not been run"""
+    with pytest.raises(AttributeError) as excinfo:
+        to_harvest.map(bands=["B1", "B2", "B3"])
+    assert "No image found" in str(excinfo.value)
