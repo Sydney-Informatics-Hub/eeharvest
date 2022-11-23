@@ -73,7 +73,7 @@ def test_preprocess(to_harvest):
     assert to_harvest.spectral == "NDVI"
 
 
-def test_map(capsys, to_harvest):
+def test_map_basically_works(capsys, to_harvest):
     """collect.map: should not produce errors"""
     auth.initialise()
     to_harvest.preprocess(mask_clouds=True, reduce="median", spectral="NDVI", clip=True)
@@ -86,6 +86,14 @@ def test_map(capsys, to_harvest):
     assert "nothing to preview" in captured.out
 
     to_harvest.map(bands="NDVI", palette="ndvi")
+    captured = capsys.readouterr()
+    assert "Map generated" in captured.out
+
+    to_harvest.map(bands="NDVI", palette="ndwi")
+    captured = capsys.readouterr()
+    assert "Map generated" in captured.out
+
+    to_harvest.map(bands="NDVI", palette="terrain")
     captured = capsys.readouterr()
     assert "Map generated" in captured.out
 
