@@ -121,10 +121,16 @@ def test_config_works_with_harvester_module(tmp_path):
     assert tif_exists is True
 
 
-def test_map_requires_preprocess_to_run_first(to_harvest):
+def test_map_requires_preprocess_to_run_first():
     """map: will not produce image if preprocess() has not been run"""
+    img = harvester.collect(
+        collection="LANDSAT/LC08/C02/T1_L2",
+        coords=[149.799, -30.31, 149.80, -30.309],
+        date_min="2019-01-01",
+        date_max="2019-02-01",
+    )
     with pytest.raises(AttributeError) as excinfo:
-        to_harvest.map(bands=["B1", "B2", "B3"])
+        img.map(bands=["SR_B1", "SR_B2", "SR_B3"])
     assert "No image found" in str(excinfo.value)
 
 
