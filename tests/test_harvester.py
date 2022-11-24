@@ -158,3 +158,10 @@ def test_auto_just_works(tmp_path):
             if file.endswith(".tif"):
                 tif_exists = True
     assert tif_exists is True
+
+
+def test_download_returns_None_if_no_bands_provided(capsys, to_harvest):
+    to_harvest.preprocess()
+    to_harvest.download(bands=None)
+    captured = capsys.readouterr()
+    assert "No bands" in captured.out
