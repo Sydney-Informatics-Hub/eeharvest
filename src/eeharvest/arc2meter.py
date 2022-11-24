@@ -30,21 +30,3 @@ def calc_arc2meter(arcsec, latitude):
     meter_lng = arcsec * np.cos(latitude * np.pi / 180) * 30.922
     meter_lat = arcsec * 30.87
     return (meter_lng, meter_lat)
-
-
-def calc_meter2arc(meter, latitude):
-    """
-    Calculate meter to arc seconds
-
-    Input
-    -----
-    meter: float, meter
-    latitude: float, latitude
-
-    Return
-    ------
-    (arcsec Long, arcsec Lat)
-    """
-    arcsec_lng = meter / np.cos(latitude * np.pi / 180) / 30.922
-    arcsec_lat = meter / 30.87
-    return (arcsec_lng, arcsec_lat)
