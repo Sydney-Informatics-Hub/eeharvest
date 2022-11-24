@@ -102,6 +102,12 @@ def test_map_basically_works(capsys, to_harvest):
     assert "not supported" in str(excinfo.value)
 
 
+def test_map_saves_html_to_folder_if_specified(to_harvest, tmp_path):
+    auth.initialise()
+    to_harvest.preprocess(mask_clouds=True, reduce="median", spectral="NDVI", clip=True)
+    to_harvest.map(bands="NDVI", save_to=os.path.join(str(tmp_path), "test.html"))
+
+
 def test_map_works_with_imagecollection(capsys, to_harvest):
     """collect.map: should work with multiple image in an ImageCollection"""
     auth.initialise()
