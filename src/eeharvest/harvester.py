@@ -5,7 +5,6 @@ import ee
 import eemont  # trunk-ignore(flake8/F401)
 import geemap.colormaps as cm
 import geemap.foliumap as geemap
-from termcolor import cprint
 
 from eeharvest import arc2meter, msg, settings, utils
 
@@ -310,6 +309,8 @@ class collect:
                     self.ee_image, self.aoi, bands, by="sd", scale=100
                 )
                 s(1)
+        else:
+            pass
         param = dict(
             min=minmax[0],
             max=minmax[1],
