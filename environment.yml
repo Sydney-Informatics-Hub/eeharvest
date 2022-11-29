@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.9
+  - geedim
   - pip
   - pip:
       - -e . # install git checkout of eeharvest in editable mode
@@ -10,7 +11,10 @@ dependencies:
       - earthengine-api>=0.1.334
       - eemont>=0.3.5
       - geemap>=0.19.0
+      - importlib_resources
+      - pyyaml
       - termcolor>=2.1.1
+      - yamale
       # -------------------------
       # Development dependencies:
       # -------------------------
