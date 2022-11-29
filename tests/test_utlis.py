@@ -7,7 +7,7 @@ from eeharvest import utils
 
 def test_suppress_stdout(capsys):
     """Test the suppress_stdout function"""
-    with utils.suppress():
+    with utils._suppress():
         print("This should not be printed")
     captured = capsys.readouterr()
     assert "This should not be printed" not in captured.out
@@ -26,7 +26,7 @@ def test_imageID_to_tifID(ee_imagecollection):
     Test that the imageID_to_tifID function extracts image IDs from an
     ee.ImageCollection and returns a list of names in .tif format
     """
-    assert type(utils.imageID_to_tifID(ee_imagecollection)) is list
+    assert type(utils._imageID_to_tifID(ee_imagecollection)) is list
 
 
 def test_validate_collection():
@@ -55,7 +55,7 @@ def test_stretch_minmax_accepts_3_bands(ee_image, geom_aoi):
     """
     assert (
         len(
-            utils.stretch_minmax(
+            utils._stretch_minmax(
                 ee_image=ee_image,
                 region=geom_aoi,
                 bands=["SR_B1", "SR_B2", "SR_B3"],
@@ -66,7 +66,7 @@ def test_stretch_minmax_accepts_3_bands(ee_image, geom_aoi):
     )
     assert (
         len(
-            utils.stretch_minmax(
+            utils._stretch_minmax(
                 ee_image=ee_image,
                 region=geom_aoi,
                 bands=["SR_B1", "SR_B2", "SR_B3"],
@@ -82,8 +82,8 @@ def test_stretch_minmax_accepts_one_band(ee_image, geom_aoi):
     stretch_minmax: function returns a list of length 2 when one band
     is provided
     """
-    assert len(utils.stretch_minmax(ee_image, geom_aoi, ["SR_B1"], scale=100)) == 2
-    assert len(utils.stretch_minmax(ee_image, geom_aoi, ["SR_B1"], "sd")) == 2
+    assert len(utils._stretch_minmax(ee_image, geom_aoi, ["SR_B1"], scale=100)) == 2
+    assert len(utils._stretch_minmax(ee_image, geom_aoi, ["SR_B1"], "sd")) == 2
 
 
 def test_stretch_minmax_produces_exception_if_not_1_or_3_bands_provided(
@@ -95,7 +95,7 @@ def test_stretch_minmax_produces_exception_if_not_1_or_3_bands_provided(
     """
     # Raise error if two bands are provided
     with pytest.raises(IndexError) as excinfo:
-        utils.stretch_minmax(ee_image, geom_aoi, ["SR_B1", "SR_B2"])
+        utils._stretch_minmax(ee_image, geom_aoi, ["SR_B1", "SR_B2"])
     assert "list index out of range" in str(excinfo.value)
 
 
@@ -104,7 +104,7 @@ def test_stretch_minmax_accepts_None_for_bands_argument(ee_image, geom_aoi):
     :stretch_minmax: function accepts False for the bands argument
     """
     # No bands provided i.e. bands=False
-    assert len(utils.stretch_minmax(ee_image, geom_aoi, False)) == 2
+    assert len(utils._stretch_minmax(ee_image, geom_aoi, False)) == 2
 
 
 def test_make_path_generates_string():
@@ -112,13 +112,13 @@ def test_make_path_generates_string():
     Test that the make_path function returns a string, and that it generates
     paths properly
     """
-    assert type(utils.make_path("folder", "filename")) is str
+    assert type(utils._make_path("folder", "filename")) is str
 
 
 def test_make_path_generates_proper_pathnames():
-    assert utils.make_path("folder", "filename") == "folder/filename"
-    assert utils.make_path(None, "filename") == "filename"
-    assert utils.make_path("folder", None) == "folder"
+    assert utils._make_path("folder", "filename") == "folder/filename"
+    assert utils._make_path(None, "filename") == "filename"
+    assert utils._make_path("folder", None) == "folder"
 
 
 # def test_generate_path_string(ee_image):
@@ -155,8 +155,8 @@ def test_generate_dir(tmpdir):
     exist, and returns the path to the directory
     """
     mydir = tmpdir.mkdir("monkey")
-    dir1 = utils.generate_dir(str(mydir))
-    dir2 = utils.generate_dir(str(mydir), "data")
+    dir1 = utils._generate_dir(str(mydir))
+    dir2 = utils._generate_dir(str(mydir), "data")
     assert type(dir1) is str
     assert type(dir2) is str
     assert "monkey" in dir1
