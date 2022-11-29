@@ -14,7 +14,7 @@ from eeharvest import msg
 
 
 @contextmanager
-def suppress():
+def _suppress():
     """
     A context manager that redirects stdout and stderr to devnull
 
@@ -40,7 +40,7 @@ def get_indices() -> dict:
     return indices["SpectralIndices"]
 
 
-def imageID_to_tifID(collection):
+def _imageID_to_tifID(collection):
     """
     Extracts the image IDs from an Earth Engine image collection and returns the
     IDs as a list of filenames in .tif
@@ -108,7 +108,7 @@ def get_bandinfo(image):
     return bands
 
 
-def stretch_minmax(
+def _stretch_minmax(
     ee_image, region, bands, by="percentile", percentile=98, sd=3, scale=None
 ):
     """
@@ -214,12 +214,12 @@ def stretch_minmax(
     return [minv, maxv]
 
 
-def generate_hash(*args):
+def _generate_hash(*args):
     fullstring = "".join(map(str, args))
     return hashlib.shake_128(fullstring.encode()).hexdigest(4)
 
 
-def make_path(dir, filename):
+def _make_path(dir, filename):
     """
     Create full path to a file
     """
@@ -279,7 +279,7 @@ def make_path(dir, filename):
 #     return out
 
 
-def generate_dir(dir, subfolder=None):
+def _generate_dir(dir, subfolder=None):
     """
     Create directory with subfolder if it doesn't exist
     """
@@ -410,7 +410,7 @@ def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=False):
             msg.warn(f"{filename} already exists, skipping download")
             return filename
         # Otherwise download image
-        with suppress():
+        with _suppress():
             # hide tqdm if disable=True
             tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
             # Get filename from path
@@ -428,7 +428,7 @@ def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=False):
         # cprint(f"✔ File saved as {path} [final size {final_size}]", "green")
         return filename
     else:
-        file_list = imageID_to_tifID(image)
+        file_list = _imageID_to_tifID(image)
         geemap.download_ee_image_collection(
             collection=image,
             out_dir=path,

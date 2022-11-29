@@ -76,7 +76,7 @@ def test_preprocess(to_harvest):
 def test_map_basically_works(capsys, to_harvest):
     """collect.map: should not produce errors"""
     auth.initialise()
-    to_harvest.preprocess(mask_clouds=True, reduce="median", spectral="NDVI", clip=True)
+    to_harvest.preprocess(spectral="NDVI")
     to_harvest.map(bands="NDVI")
     captured = capsys.readouterr()
     assert "Map generated" in captured.out
@@ -85,6 +85,9 @@ def test_map_basically_works(capsys, to_harvest):
     captured = capsys.readouterr()
     assert "nothing to preview" in captured.out
 
+
+def test_map_accepts_certain_palette_values(capsys, to_harvest):
+    to_harvest.preprocess(spectral="NDVI")
     to_harvest.map(bands="NDVI", palette="ndvi")
     captured = capsys.readouterr()
     assert "Map generated" in captured.out
@@ -97,6 +100,8 @@ def test_map_basically_works(capsys, to_harvest):
     captured = capsys.readouterr()
     assert "Map generated" in captured.out
 
+
+def test_preprocess_produces_error_when_reduce_value_is_not_supported(to_harvest):
     with pytest.raises(ValueError) as excinfo:
         to_harvest.preprocess(reduce="monkey")
     assert "not supported" in str(excinfo.value)

@@ -306,7 +306,7 @@ class collect:
         if minmax is None:
             with msg.spin("Detecting band min and max parameters...") as s:
                 # Scale here is just for visualisation purposes]
-                minmax = utils.stretch_minmax(
+                minmax = utils._stretch_minmax(
                     self.ee_image, self.aoi, bands, by="sd", scale=100
                 )
                 s(1)
@@ -457,11 +457,13 @@ class collect:
             scale = round(xres_meters, 1)
 
         # Use attributes to generate filename hash
-        hash = utils.generate_hash(collection, date_min, date_max, bands, reduce, scale)
+        hash = utils._generate_hash(
+            collection, date_min, date_max, bands, reduce, scale
+        )
         filename = f"ee_{''.join(collection.split('/')[0])}_{hash}.tif"
 
         # Generate path string
-        final_destination = os.path.join(utils.generate_dir(outpath), filename)
+        final_destination = os.path.join(utils._generate_dir(outpath), filename)
         msg.info(f"Setting download dir to {outpath}")
         filenames = utils.download_tif(
             img, aoi, final_destination, scale, overwrite=overwrite
