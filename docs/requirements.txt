@@ -4,3 +4,13 @@
 # sphinx_rtd_theme
 myst-parser[linkify]
 sphinx>=3.2.1
+importlib-metadata
+importlib-resources
+alive-progress
+earthengine-api
+eemont
+geedim
+geemap
+pyyaml
+termcolor
+yamale
