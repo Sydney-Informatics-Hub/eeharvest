@@ -57,8 +57,6 @@ python3 -m http.server --directory 'docs/_build/html'
 
 ## Code Contributions
 
-TODO
-
 <!-- Please include a reference or explanation about the internals of the project.
 
 An architecture description, design principles or at least a summary of the
@@ -82,7 +80,7 @@ virtualenv <PATH TO VENV>
 source <PATH TO VENV>/bin/activate
 ```
 
-or [Miniconda]:
+or [Miniconda] (recommended):
 
 ```sh
 conda create -n eeharvest python=3 six virtualenv pytest pytest-cov
@@ -287,10 +285,5 @@ on [PyPI], the following steps can be used to release a new version for
 [tox]: https://tox.readthedocs.io/en/stable/
 [virtual environment]: https://realpython.com/python-virtual-environments-a-primer/
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
-
-```{todo} Please review and change the following definitions:
-
-```
-
-[repository]: https://github.com/<USERNAME>/eeharvest
-[issue tracker]: https://github.com/<USERNAME>/eeharvest/issues
+[repository]: https://github.com/sydney-informatics-hub/eeharvest
+[issue tracker]: https://github.com/sydney-informatics-hub/eeharvest/issues
