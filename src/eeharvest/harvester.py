@@ -25,9 +25,8 @@ class collect:
         GPS coordinates in WGS84 [East, North]. Minimum of one set of
         coordinates should be provided to create a point coordinate. If more
         than one set of coordinates is provided, a polygon will be created
-    date : str
         Start date of image(s) to be collected in YYYY-MM-DD or YYYY format
-    end_date : str, optional
+    date_max : str, optional
         End date of image(s) to be collected in YYYY-MM-DD or YYYY format
     buffer : int, optional
         If `coords` is a point, a buffer can be provided to create a polygon.
@@ -37,7 +36,7 @@ class collect:
         point based on the buffer size
     config: str
         Path string to a YAML configuration file. A default configuration file
-        can be generated for editing using `template()` method.
+        can be generated for editing using `template()` method
 
     Methods
     -------
@@ -105,18 +104,19 @@ class collect:
         Preprocess an Earth Engine Image or ImageCollection
 
         Obtain image stacks from a Google Earth Engine catalog collection for
-        processing. Full support for Sentinel-2, Landsat 5-8, Soil and Landscape
-        Grid Australia (CSIRO) and DEM (Geoscience Australia). Preprocessing
-        performs server-side filtering, cloud masking, scaling and offsetting,
-        calculation of spectral indices and compositing into a single image
-        representing, for example, the median, min, max, mean, quantile or
-        standard deviation of the images.
+        processing. Preprocessing performs server-side filtering, cloud masking,
+        scaling and offsetting, calculation of spectral indices and compositing
+        into a single image representing, for example, the median, min, max,
+        mean, quantile or standard deviation of the images.
 
         Parameters
         ----------
         mask_clouds : bool, optional
             Performs cloud and shadow masking for Sentinel-2 and Landsat 5-9
             image collections, by default True
+        mask_probability: int, optional
+            The probability threshold for cloud masking. This is only used if
+            cloud masking is enabled, by default 60
         reduce : str, optional
             Composite or reduce an image collection into a single image. A
             comprehensive list of reducers can be viewed from the "ee.Reducer"
@@ -257,6 +257,9 @@ class collect:
             in https://matplotlib.org/stable/tutorials/colors/colormaps.html. In
             addition, "ndvi", "ndwi" and "terrain" palettes are available. If
             set to None, "viridis" is used, by default None
+        save_to : str, optional
+            A string representing the path to save the map to. If set to None,
+            will not save the map, by default None
 
         Returns
         -------
@@ -386,16 +389,13 @@ class collect:
             A string representing the path to the output directory. If set to
             None, will use the current working directory and add a "downloads"
             folder, by default None
-        out_format : str, optional
-            One of the following strings: "png", "jpg", "tif". If set to None,
-            will use "tif", by default None
         overwrite : boolean, optional
             Overwrite existing file if it already exists, by default False
 
         Returns
         -------
-        None
-            Nothing is returned.
+        img : ee.Image
+            An Earth Engine image object
 
         Raises
         ------
