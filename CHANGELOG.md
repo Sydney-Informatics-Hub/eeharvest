@@ -15,6 +15,17 @@
 📦: build |
 🚧: work in progress
 
+## 🚢 Version 1.0.0
+
+🎉🎉🎉 This is it! 🎉🎉🎉
+
+### Changed
+
+- 📖: Update CONTRIBUTING.md, requirements.txt and setup.cfg
+- 🐞: Fixed gdal-config error that appeared because gdal dependencies were not
+  available in pip but can be configured automatically in conda
+- 📦: Improve dependency management and conda settings in tox.ini
+
 ## 🚢 Version 0.3.1
 
 ### Changed
