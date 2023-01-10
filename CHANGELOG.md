@@ -15,6 +15,15 @@
 📦: build |
 🚧: work in progress
 
+## 🚢 Version 1.0.1
+
+### Changed
+
+- 🐞: Fix bug in importing `eeharvest` that was caused by a missing
+  `importlib_resources` dependency
+- 📖: Updated documentation to instruct users to install GDAL before installing
+  `eeharvest`
+
 ## 🚢 Version 1.0.0
 
 🎉🎉🎉 This is it! 🎉🎉🎉
