@@ -71,16 +71,16 @@ website, so we won't repeat these here. For the Google Cloud SDK, follow the
 instructions on the [gcloud CLI](https://cloud.google.com/sdk/docs/install)
 page.
 
-### Installing `eeharvest` using `pip` or `conda`
+### Pip
 
 ```sh
 pip install eeharvest
 ```
 
-or, using conda:
+### Conda
 
 ```sh
-# conda install eeharvest - WORK IN PROGRESS
+# conda install -c conda-forge eeharvest # WORK IN PROGRESS
 ```
 
 <!-- pyscaffold-notes -->
