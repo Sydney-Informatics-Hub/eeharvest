@@ -13,30 +13,42 @@ PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](ht
 
 # eeharvest
 
-Simplify the download and processing of Google Earth Engine data by leveraging
-on available python packages into three (3) intuitive functions:
+The `eeharvest` package was designed to simplify access to Google Earth Engine's
+data catalog through a trio of convenient methods to collect, process and
+download data:
 
 - `preprocess()`: server-side processing, cloud and shadow masking, image
   reduction and calculation of spectral indices
-- `map()`: preview data rasters on an interactive map before downloading
-- `download()`: download data collection, ready for client-side processing
-<!-- - `aggregate()`: perform additional temporal and/or spatial aggregaton on data -->
+- `aggregate()`: (work-in-progress) perform additional temporal and/or spatial
+  aggregaton on data
+- `download()`: download data collection(s) to disk without limits on size or
+  number of files
+
+## Example
+
+```python
+from eeharvest import harvester
+# specify collection, coordinates and date range
+img = harvester.collect(
+        collection="LANDSAT/LC08/C02/T1_L2",
+        coords=[149.799, -30.31, 149.80, -30.309],
+        date_min="2019-01-01",
+        date_max="2019-02-01",
+    )
+
+# cloud and shadow masking, spatial aggregation, NDVI calculation
+img.preprocess(mask_clouds=True, reduce="median", spectral="NDVI")
+
+# download to disk
+img.download(bands="NDVI")
+```
 
 ## Installation
 
-On PyPi:
+### Installing dependencies from conda
 
-```sh
-pip install eeharvest
-```
-
-Or use `conda`:
-
-```sh
-# conda install eeharvest - WORK IN PROGRESS
-```
-
-You may need to install the following packages manually:
+Before installing the package you may need to install the following packages
+manually:
 
 - [GDAL](https://gdal.org/download.html): to manipulate raster and vector
   geospatial data.
@@ -48,6 +60,27 @@ In most cases, these can be installed through conda-forge:
 
 ```sh
 conda install -c conda-forge gdal google-cloud-sdk
+```
+
+### Installing dependencies from binaries
+
+If you do not wish to use conda, you can install the dependencies from binaries.
+For GDAL, use `apt-get` or `brew` (macOS). Clear instructions have been written
+on the [rasterio](https://rasterio.readthedocs.io/en/latest/installation.html)
+website, so we won't repeat these here. For the Google Cloud SDK, follow the
+instructions on the [gcloud CLI](https://cloud.google.com/sdk/docs/install)
+page.
+
+### Installing `eeharvest` using `pip` or `conda`
+
+```sh
+pip install eeharvest
+```
+
+or, using conda:
+
+```sh
+# conda install eeharvest - WORK IN PROGRESS
 ```
 
 <!-- pyscaffold-notes -->
