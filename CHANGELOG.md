@@ -15,13 +15,19 @@
 📦: build |
 🚧: work in progress
 
+## 🚢 Version 1.0.2
+
+### Changed
+
+- 🐞: Fix same bug as in 1.0.1, forgot to include dependency in setup.cfg (oops)
+
 ## 🚢 Version 1.0.1
 
 ### Changed
 
 - 🐞: Fix bug in importing `eeharvest` that was caused by a missing
-  `importlib_resources` dependency
-- 📖: Updated documentation to instruct users to install GDAL before installing
+  `importlib_resources` dependency #1
+- 📖: Update documentation to instruct users to install GDAL before installing
   `eeharvest`
 
 ## 🚢 Version 1.0.0
