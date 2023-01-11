@@ -446,7 +446,7 @@ class collect:
             msg.info(f"Band(s) selected: {bands}")
 
         # Convert scale from arsec to meters (if from config file)
-        if cfg is None:
+        if self.config is None:
             pass
         else:
             lat_center = (coords[1] + coords[3]) / 2
