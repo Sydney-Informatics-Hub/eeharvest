@@ -76,7 +76,8 @@ def validate_collection(collection):
     else:
         errmsg = (
             f"Collection {collection} not found in GEE STAC. Please "
-            + "check spelling. Processing cancelled"
+            + "check spelling or find a collection from "
+            + "https://developers.google.com/earth-engine/datasets/catalog"
         )
         msg.err(errmsg)
         return False
