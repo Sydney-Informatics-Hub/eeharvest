@@ -1,12 +1,37 @@
 # import datetime  # for date parsing, but check later if this is needed
+import json
 import os
+import urllib
+from functools import partialmethod
 
 import ee
 import eemont  # trunk-ignore(flake8/F401)
 import geemap.colormaps as cm
 import geemap.foliumap as geemap
+from tqdm.notebook import tqdm
 
 from eeharvest import arc2meter, msg, settings, utils
+
+def initialise(auth_mode="gcloud"):
+    """
+    Initialise Google Earth Engine API
+
+    Try to initialise Google Earth Engine API. If it fails, the user is prompted
+    to authenticate through the command line interface.
+    """
+    # Check if initialised:
+    if ee.data._credentials:
+        msg.warn("Earth Engine API already authenticated")
+    else:
+        with msg.spin("Initialising Earth Engine...") as s:
+            geemap.ee_initialize(auth_mode=auth_mode)
+            s()
+        if ee.data._credentials:
+            msg.success("Earth Engine authenticated")
+        else:
+            msg.warn(
+                "Something went wrong, please run `initialise()` again to authenticate"
+            )
 
 
 class collect:
@@ -279,7 +304,7 @@ class collect:
         except AttributeError:
             raise AttributeError("No image found, please run `preprocess()`")
         # Validate that at least one band is selected
-        all_bands = utils.get_bandinfo(img)
+        all_bands = get_bandinfo(img)
         if bands is None:
             print("✘ No bands defined - nothing to preview")
             print("\u2139 Please select one or more bands to view image:")
@@ -436,7 +461,7 @@ class collect:
         reduce = self.reduce
         # Check if bands are set
         if bands is None:
-            all_bands = utils.get_bandinfo(img)
+            all_bands = get_bandinfo(img)
             msg.err("No bands defined")
             msg.info("Please select one or more bands to download image:")
             msg.info(str(all_bands))
@@ -466,7 +491,7 @@ class collect:
         # Generate path string
         final_destination = os.path.join(utils._generate_dir(outpath), filename)
         msg.info(f"Setting download dir to {outpath}")
-        filenames = utils.download_tif(
+        filenames = download_tif(
             img, aoi, final_destination, scale, overwrite=overwrite
         )
         msg.success("Google Earth Engine download(s) complete")
@@ -485,3 +510,148 @@ def auto(config, outpath=None):
     else:
         img.download(outpath=outpath)
     return img
+
+
+def get_indices() -> dict:
+    """
+    Returns a dictionary of available indices from Awesome Spectral Indices
+    """
+    with urllib.request.urlopen(
+        # trunk-ignore(flake8/E501)
+        "https://raw.githubusercontent.com/awesome-spectral-indices/awesome-spectral-indices/main/output/spectral-indices-dict.json"
+    ) as url:
+        try:
+            indices = json.loads(url.read().decode())
+        except Exception as e:
+            print(e)
+    return indices["SpectralIndices"]
+
+
+def ee_stac():
+    """
+    Returns full list of STAC IDs from the Earth Engine Data Catalog
+    """
+    try:
+        # trunk-ignore(flake8/E501)
+        stac_url = "https://raw.githubusercontent.com/samapriya/Earth-Engine-Datasets-List/master/gee_catalog.json"
+        datasets = []
+        with urllib.request.urlopen(stac_url) as url:
+            data = json.loads(url.read().decode())
+            datasets = [item["id"] for item in data]
+        return datasets
+    except Exception as e:
+        raise Exception(e)
+
+
+def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=False):
+    """
+    Download image to local folder as GeoTIFF
+
+    Parameters
+    ----------
+    image : obj
+        ee.Image or ee.ImageCollection object
+    region : dict
+        ee.Geometry object
+    path : str
+        Path to save image to
+    scale : int
+        Scale in metres to define the image resolution
+    crs : str, optional
+        Coordinate reference system, by default "EPSG:4326"
+    """
+    if isinstance(image, ee.image.Image):
+        filename = os.path.basename(path)
+        # Check if path already exists and don't download if it does
+        if os.path.exists(path) and overwrite is False:
+            msg.warn(f"{filename} already exists, skipping download")
+            return filename
+        # Otherwise download image
+        with utils._suppress():
+            # hide tqdm if disable=True
+            tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
+            # Get filename from path
+
+            with msg.spin(f"Downloading {filename}") as s:
+                geemap.download_ee_image(
+                    image=image,
+                    region=region,
+                    filename=path,
+                    crs="EPSG:4326",
+                    scale=scale,
+                )
+                s(1)
+        # final_size = convert_size(os.path.getsize(path))
+        # cprint(f"✔ File saved as {path} [final size {final_size}]", "green")
+        return filename
+    else:
+        file_list = utils._imageID_to_tifID(image)
+        geemap.download_ee_image_collection(
+            collection=image,
+            out_dir=path,
+            region=region,
+            crs="EPSG:4326",
+            scale=scale,
+        )
+        # cprint(f"✔ Files saved to {path}", "green")
+    return file_list
+
+
+def validate_collection(collection):
+    """
+    Checks whether collection ID string is a STAC in the GEE catalog
+
+    Parameters
+    ----------
+    collection : string
+        A string representing the collection ID
+
+    Returns
+    -------
+    boolean
+        True if collection is in the GEE catalog, False otherwise
+    """
+    stac_list = ee_stac()
+    supported = supported_collections()
+    # Check if collection is in STAC and supported
+    if collection in stac_list and collection in list(supported.keys()):
+        return True
+    # If in STAC but not supported, print info and continue
+    elif collection in stac_list and collection not in list(supported.keys()):
+        msg.warn(f"Collection {collection} is not officially supported.")
+        print("  Some preprocessing and aggregation steps are not available")
+        return True
+    else:
+        errmsg = (
+            f"Collection {collection} not found in GEE STAC. Please "
+            + "check spelling or find a collection from "
+            + "https://developers.google.com/earth-engine/datasets/catalog"
+        )
+        msg.err(errmsg)
+        return False
+
+
+def supported_collections():
+    """
+    A dictionary of supported collections
+    """
+    supported = {
+        "LANDSAT/LT05/C02/T1_L2": "Landsat 5 TM Surface Reflectance",
+        "LANDSAT/LE07/C02/T1_L2": "Landsat 7 ETM+ Surface Reflectance",
+        "LANDSAT/LC08/C02/T1_L2": "Landsat 8 OLI/TIRS Surface Reflectance",
+        "LANDSAT/LC09/C02/T1_L2": "Landsat 9 OLI-2/TIRS-2 Surface Reflectance",
+        "COPERNICUS/S2_SR": "Sentinel-2 Surface Reflectance",
+        "CSIRO/SLGA": "Soil and Landscape Grid of Australia (SLGA)",
+    }
+    return supported
+
+
+def get_bandinfo(image):
+    """
+    Return list of available bands in image
+    """
+    try:
+        bands = image.bandNames().getInfo()
+    except AttributeError:
+        bands = image.first().bandNames().getInfo()
+    return bands

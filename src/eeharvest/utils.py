@@ -25,21 +25,6 @@ def _suppress():
             yield (err, out)
 
 
-def get_indices() -> dict:
-    """
-    Returns a dictionary of available indices from Awesome Spectral Indices
-    """
-    with urllib.request.urlopen(
-        # trunk-ignore(flake8/E501)
-        "https://raw.githubusercontent.com/awesome-spectral-indices/awesome-spectral-indices/main/output/spectral-indices-dict.json"
-    ) as url:
-        try:
-            indices = json.loads(url.read().decode())
-        except Exception as e:
-            print(e)
-    return indices["SpectralIndices"]
-
-
 def _imageID_to_tifID(collection):
     """
     Extracts the image IDs from an Earth Engine image collection and returns the
@@ -47,66 +32,6 @@ def _imageID_to_tifID(collection):
     """
     idList = collection.aggregate_array("system:index")
     return [f"{i}.tif" for i in idList.getInfo()]
-
-
-def validate_collection(collection):
-    """
-    Checks whether collection ID string is a STAC in the GEE catalog
-
-    Parameters
-    ----------
-    collection : string
-        A string representing the collection ID
-
-    Returns
-    -------
-    boolean
-        True if collection is in the GEE catalog, False otherwise
-    """
-    stac_list = ee_stac()
-    supported = supported_collections()
-    # Check if collection is in STAC and supported
-    if collection in stac_list and collection in list(supported.keys()):
-        return True
-    # If in STAC but not supported, print info and continue
-    elif collection in stac_list and collection not in list(supported.keys()):
-        msg.warn(f"Collection {collection} is not officially supported.")
-        print("  Some preprocessing and aggregation steps are not available")
-        return True
-    else:
-        errmsg = (
-            f"Collection {collection} not found in GEE STAC. Please "
-            + "check spelling or find a collection from "
-            + "https://developers.google.com/earth-engine/datasets/catalog"
-        )
-        msg.err(errmsg)
-        return False
-
-
-def supported_collections():
-    """
-    A dictionary of supported collections
-    """
-    supported = {
-        "LANDSAT/LT05/C02/T1_L2": "Landsat 5 TM Surface Reflectance",
-        "LANDSAT/LE07/C02/T1_L2": "Landsat 7 ETM+ Surface Reflectance",
-        "LANDSAT/LC08/C02/T1_L2": "Landsat 8 OLI/TIRS Surface Reflectance",
-        "LANDSAT/LC09/C02/T1_L2": "Landsat 9 OLI-2/TIRS-2 Surface Reflectance",
-        "COPERNICUS/S2_SR": "Sentinel-2 Surface Reflectance",
-        "CSIRO/SLGA": "Soil and Landscape Grid of Australia (SLGA)",
-    }
-    return supported
-
-
-def get_bandinfo(image):
-    """
-    Return list of available bands in image
-    """
-    try:
-        bands = image.bandNames().getInfo()
-    except AttributeError:
-        bands = image.first().bandNames().getInfo()
-    return bands
 
 
 def _stretch_minmax(
@@ -387,78 +312,8 @@ def _generate_dir(dir, subfolder=None):
 #     return "%s %s" % (s, size_name[i])
 
 
-def download_tif(image, region, path, scale, crs="EPSG:4326", overwrite=False):
-    """
-    Download image to local folder as GeoTIFF
-
-    Parameters
-    ----------
-    image : obj
-        ee.Image or ee.ImageCollection object
-    region : dict
-        ee.Geometry object
-    path : str
-        Path to save image to
-    scale : int
-        Scale in metres to define the image resolution
-    crs : str, optional
-        Coordinate reference system, by default "EPSG:4326"
-    """
-    if isinstance(image, ee.image.Image):
-        filename = os.path.basename(path)
-        # Check if path already exists and don't download if it does
-        if os.path.exists(path) and overwrite is False:
-            msg.warn(f"{filename} already exists, skipping download")
-            return filename
-        # Otherwise download image
-        with _suppress():
-            # hide tqdm if disable=True
-            tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
-            # Get filename from path
-
-            with msg.spin(f"Downloading {filename}") as s:
-                geemap.download_ee_image(
-                    image=image,
-                    region=region,
-                    filename=path,
-                    crs="EPSG:4326",
-                    scale=scale,
-                )
-                s(1)
-        # final_size = convert_size(os.path.getsize(path))
-        # cprint(f"✔ File saved as {path} [final size {final_size}]", "green")
-        return filename
-    else:
-        file_list = _imageID_to_tifID(image)
-        geemap.download_ee_image_collection(
-            collection=image,
-            out_dir=path,
-            region=region,
-            crs="EPSG:4326",
-            scale=scale,
-        )
-        # cprint(f"✔ Files saved to {path}", "green")
-    return file_list
-
-
 # def parse_year_to_range(date):
 #     """Convert single-year value to ymd range for the same year"""
 #     start = str(date[0]) + "-01-01"
 #     end_date = str(date[0]) + "-12-31"
 #     return start, end_date
-
-
-def ee_stac():
-    """
-    Returns full list of STAC IDs from the Earth Engine Data Catalog
-    """
-    try:
-        # trunk-ignore(flake8/E501)
-        stac_url = "https://raw.githubusercontent.com/samapriya/Earth-Engine-Datasets-List/master/gee_catalog.json"
-        datasets = []
-        with urllib.request.urlopen(stac_url) as url:
-            data = json.loads(url.read().decode())
-            datasets = [item["id"] for item in data]
-        return datasets
-    except Exception as e:
-        raise Exception(e)
