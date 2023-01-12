@@ -7,7 +7,7 @@ dependencies:
   - pip
   - pip:
       - -e . # install git checkout of eeharvest in editable mode
-      - alive-progress>=2.4.1
+      - alive-progress
       - earthengine-api>=0.1.334
       - eemont>=0.3.5
       - geemap>=0.19.0
