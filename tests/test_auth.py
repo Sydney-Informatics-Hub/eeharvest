@@ -10,11 +10,11 @@ def test_that_repeat_authentication_is_not_required(capsys):
     for key in list(sys.modules.keys()):
         if key.startswith("eeharvest"):
             del sys.modules[key]
-    from eeharvest import auth
+    from eeharvest import harvester
 
-    auth.initialise()
+    harvester.initialise()
     captured = capsys.readouterr()
     assert "authenticated" in captured.out
-    auth.initialise()
+    harvester.initialise()
     captured = capsys.readouterr()
     assert "already authenticated" in captured.out

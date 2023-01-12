@@ -5,7 +5,7 @@ from pathlib import Path
 import ee
 import pytest
 
-from eeharvest import auth, harvester
+from eeharvest import harvester
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -38,7 +38,7 @@ def coords():
 
 @pytest.fixture(scope="session", autouse=True)
 def geom_aoi(coords):
-    auth.initialise()
+    harvester.initialise()
     """Fixture coordinates converted to an ee.Geometry object"""
     return ee.Geometry.Rectangle(coords)
 
@@ -46,7 +46,7 @@ def geom_aoi(coords):
 @pytest.fixture(scope="session", autouse=True)
 def ee_imagecollection(coords):
     """Fixture for an ee.ImageCollection"""
-    auth.initialise()
+    harvester.initialise()
     img = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2")
     img = img.filterDate("2019-01-01", "2019-02-01")
     return img.filterBounds(ee.Geometry.Rectangle(coords))
@@ -61,7 +61,7 @@ def ee_image(ee_imagecollection):
 @pytest.fixture(scope="session", autouse=True)
 def to_harvest():
     """Fixture for a collect object"""
-    auth.initialise()
+    harvester.initialise()
     img = harvester.collect(
         collection="LANDSAT/LC08/C02/T1_L2",
         coords=[149.799, -30.31, 149.80, -30.309],

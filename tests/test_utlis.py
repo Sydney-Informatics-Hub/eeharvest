@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from eeharvest import utils
+from eeharvest import harvester, utils
 
 
 def test_suppress_stdout(capsys):
@@ -18,7 +18,7 @@ def test_get_indices():
     Test that the get_indices function downloads the list of indices from
     Awesome Spectral Indices and prints them as a dict
     """
-    assert type(utils.get_indices()) is dict
+    assert type(harvester.get_indices()) is dict
 
 
 def test_imageID_to_tifID(ee_imagecollection):
@@ -34,9 +34,9 @@ def test_validate_collection():
     Test that the validate_collection function returns True if the collection
     is valid and False if it is not
     """
-    assert utils.validate_collection("LANDSAT/LC08/C02/T1_L2") is True
-    assert utils.validate_collection("MODIS/006/MCD43A4") is True
-    assert utils.validate_collection("NOT/A/COLLECTION") is False
+    assert harvester.validate_collection("LANDSAT/LC08/C02/T1_L2") is True
+    assert harvester.validate_collection("MODIS/006/MCD43A4") is True
+    assert harvester.validate_collection("NOT/A/COLLECTION") is False
 
 
 def test_get_bandinfo(ee_image):
@@ -44,7 +44,7 @@ def test_get_bandinfo(ee_image):
     Test that the get_bandinfo function returns a list of band names when run
     on an ee.ImageCollection or ee.Image object
     """
-    bands = utils.get_bandinfo(ee_image)
+    bands = harvester.get_bandinfo(ee_image)
     assert type(bands) is list
 
 
@@ -169,10 +169,10 @@ def test_download_tif_single_image(tmpdir, ee_image, coords, capsys):
     mydir = tmpdir.mkdir("download")
     mypath = os.path.join(mydir + ".tif")
     # Download file
-    utils.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
+    harvester.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
     assert os.path.isfile(mypath) is True
     # Skip if file has already been downloaded
-    utils.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
+    harvester.download_tif(image=ee_image, region=coords, path=mypath, scale=100)
     captured = capsys.readouterr()
     assert "already exists" in captured.out
 
@@ -185,7 +185,9 @@ def test_download_tif_multiple_images(tmpdir, ee_imagecollection, coords):
     # Generate a temporary directory
     mydir = tmpdir.mkdir("download")
     # Download files
-    utils.download_tif(image=ee_imagecollection, region=coords, path=mydir, scale=100)
+    harvester.download_tif(
+        image=ee_imagecollection, region=coords, path=mydir, scale=100
+    )
     count = 0
     for path in os.scandir(mydir):
         if path.is_file():
