@@ -12,6 +12,7 @@ from tqdm.notebook import tqdm
 
 from eeharvest import arc2meter, msg, settings, utils
 
+
 def initialise(auth_mode="gcloud"):
     """
     Initialise Google Earth Engine API
@@ -24,13 +25,16 @@ def initialise(auth_mode="gcloud"):
         msg.warn("Earth Engine API already authenticated")
     else:
         with msg.spin("Initialising Earth Engine...") as s:
-            geemap.ee_initialize(auth_mode=auth_mode)
+            try:
+                geemap.ee_initialize(auth_mode=auth_mode)
+            except Exception as e:
+                print(e)
             s()
         if ee.data._credentials:
             msg.success("Earth Engine authenticated")
         else:
             msg.warn(
-                "Something went wrong, please run `initialise()` again to authenticate"
+                "Initialisation cancelled. Please check error message"
             )
 
 
