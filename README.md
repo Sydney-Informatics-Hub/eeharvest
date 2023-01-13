@@ -1,6 +1,6 @@
 [![Project generated with
 PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
-[![ReadTheDocs](https://readthedocs.org/projects/eeharvest/badge/?version=latest)](https://eeharvest.readthedocs.io/en/stable/)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 <!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly.
 [![Coveralls](https://img.shields.io/coveralls/github/<USER>/eeharvest/main.svg)](https://coveralls.io/r/<USER>/eeharvest)
@@ -51,12 +51,13 @@ Before installing the package you may need to install the following packages
 manually:
 
 - [GDAL](https://gdal.org/download.html): to manipulate raster and vector
-  geospatial data.
+  geospatial data
 - [gcloud
   CLI](https://cloud.google.com/sdk/docs/install): needed to authenticate
-  to Google servers.
+  to Google servers
 
-In most cases, these can be installed through conda-forge:
+In most cases, these can be installed through conda-forge (but see alternatives
+below if not):
 
 ```sh
 conda install -c conda-forge gdal google-cloud-sdk
@@ -106,12 +107,9 @@ project, please include the following acknowledgment:
 ## Note
 
 This project has been set up using [PyScaffold] 4.3.1 and the [dsproject
-extension] 0.7.2.
+extension] 0.7.2. Developers will also need to install [pre-commit]. For more
+information see CONTRIBUTING.md in this repository.
 
-[conda]: https://docs.conda.io/
 [pre-commit]: https://pre-commit.com/
-[jupyter]: https://jupyter.org/
-[nbstripout]: https://github.com/kynan/nbstripout
-[google style]: http://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings
 [pyscaffold]: https://pyscaffold.org/
 [dsproject extension]: https://github.com/pyscaffold/pyscaffoldext-dsproject
