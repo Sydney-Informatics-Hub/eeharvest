@@ -1,3 +1,9 @@
+## v1.0.2 (2023-01-18)
+
+### Fix
+
+- disable codecov upload
+
 ## v1.0.1 (2023-01-18)
 
 ### Fix
