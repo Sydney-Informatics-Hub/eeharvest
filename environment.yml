@@ -19,6 +19,7 @@ dependencies:
       # Development dependencies:
       # -------------------------
       - jupyterlab
+      - commitizen
       - myst-parser
       - nbdime
       - nbstripout
