@@ -28,6 +28,7 @@ download data:
 
 ```python
 from eeharvest import harvester
+harvester.initialise()
 # specify collection, coordinates and date range
 img = harvester.collect(
         collection="LANDSAT/LC08/C02/T1_L2",
@@ -65,7 +66,7 @@ conda install -c conda-forge gdal google-cloud-sdk
 
 ### Installing dependencies from binaries
 
-If you do not wish to use conda, you can install the dependencies from binaries.
+If conda is somehow not an option, you can install the dependencies from binaries.
 For GDAL, use `apt-get` or `brew` (macOS). Clear instructions have been written
 on the [rasterio](https://rasterio.readthedocs.io/en/latest/installation.html)
 website, so we won't repeat these here. For the Google Cloud SDK, follow the
