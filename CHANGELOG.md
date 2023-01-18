@@ -1,86 +1,46 @@
-# Changelog
+## v1.0.0 (2023-01-18)
 
-🚢: release |
-🚨: breaking |
-✨: new |
-🔒: security |
-🛠: improvement
-⚡️: performance |
-🐞: bugfix |
-📖: docs |
-⚙️: chore |
-♻️: refactor |
-🚦: tests |
-🎨: style |
-📦: build |
-🚧: work in progress
+### BREAKING CHANGE
 
-## 🚢 Version 1.0.2
+- the followimg methods now belong to  the harvester module: initialise, get)indices, ee_stac, download_tif,  validate_collections, supported_collections, get_bandinfo
 
-### Changed
+### Fix
 
-- 🐞: Fix same bug as in 1.0.1, forgot to include dependency in setup.cfg (oops)
+- `download()` can fail due to incorrect object assignment
+- same dependency error as before (`importlib_resources`)
+- missing dependency
 
-## 🚢 Version 1.0.1
+### Refactor
 
-### Changed
+- consolidate methods into harvester module
 
-- 🐞: Fix bug in importing `eeharvest` that was caused by a missing
-  `importlib_resources` dependency #1
-- 📖: Update documentation to instruct users to install GDAL before installing
-  `eeharvest`
+### Perf
 
-## 🚢 Version 1.0.0
+- improve prompt to download gcloud cli if needed
 
-🎉🎉🎉 This is it! 🎉🎉🎉
+## v0.3.1 (2022-11-29)
 
-### Changed
+## v0.3.0 (2022-11-29)
 
-- 📖: Update CONTRIBUTING.md, requirements.txt and setup.cfg
-- 🐞: Fixed gdal-config error that appeared because gdal dependencies were not
-  available in pip but can be configured automatically in conda
-- 📦: Improve dependency management and conda settings in tox.ini
+### Feat
 
-## 🚢 Version 0.3.1
+- add ability to overwrite outpath value in config through function
+- new messaging style for titles
+- new function to generate unique hash for downloads
+- add_missing_keys to always fill in defaults to config file
+- add schema and config yaml files to src
+- new settings module to handle config-related functions
+- new schema template to validate yaml using yamale
 
-### Changed
+### Fix
 
-- 📦: Update dependency lists in tox.ini and environment.yml
-- 📖: Update README to better describe package functionality
+- raise exception instead of message to stop run appropriately
+- convert paths to string and clarify exception handling
+- forgot to update schema.yaml in src
+- update schema.yaml to accept null value in the reduce key
+- missing pathlib import
+- incorrect path to file causing FileNotFound error
 
-## 🚢 Version 0.3
+### Refactor
 
-### Added
-
-- 🚦: Pytest integration. Tests now cover > 90% of the code
-
-### Changed
-
-- 🐞: Minimum Python version set to 3.9 and above, was 3.11 before
-- 📦: Update tox.ini to publish package on [TestPyPi](https://test.pypi.org/) -
-  tested and working
-- 📖: Update documentation throughout (modules, readme, examples, etc) to prepare
-  for eventual publication to PyPi and conda-forge
-
-## 🚢 Version 0.2
-
-### Added
-
-- 📦: Integration with trunk.io, PyScaffold and tox for automated build and
-  testing
-
-### Changed
-
-- 🛠: Made some utility functions private so that users won't become confused
-  using them
-- 🐞: Fix multiple issues due to migration, including module referencing,
-  documentation and example code
-- 🐞: Fix how paths to config files are obtained by using the `importlib_resources`
-  package, which is compatible to Python versions <3.9
-
-## 🚢 Version 0.1
-
-### Added
-
-- 📦: Migration of Google Earth Engine code from the AgReFed Data Harvester
-  notebook. Hello `eeharvest`!
+- changed some names
