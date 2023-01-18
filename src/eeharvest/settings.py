@@ -23,7 +23,7 @@ def validate_schema(path, schema_path=None):
         path = yaml.dump(path)
         data = yamale.make_data(content=str(path))
     try:
-        yamale.validate(schema, data)
+        yamale.validate(schema, data, strict=False)
         msg.success("YAML schema validated")
     except yamale.YamaleError as e:
         msg.err(f"{type(e).__name__}" + f"{e}")
