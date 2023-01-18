@@ -1,3 +1,9 @@
+## v1.0.1 (2023-01-18)
+
+### Fix
+
+- add missing code in README to initialise to GEE
+
 ## v1.0.0 (2023-01-18)
 
 ### BREAKING CHANGE
