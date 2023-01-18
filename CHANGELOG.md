@@ -1,3 +1,9 @@
+## v1.0.4 (2023-01-18)
+
+### Fix
+
+- `YamaleErrorError` validating a YAML file
+
 ## v1.0.3 (2023-01-18)
 
 ### Fix
