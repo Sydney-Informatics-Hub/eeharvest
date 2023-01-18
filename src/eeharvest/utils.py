@@ -1,16 +1,9 @@
 import hashlib
-import json
 import os
-import urllib
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
-from functools import partialmethod
 from os import devnull
 
 import ee
-import geemap
-from tqdm.notebook import tqdm
-
-from eeharvest import msg
 
 
 @contextmanager
