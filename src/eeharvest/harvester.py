@@ -91,10 +91,11 @@ class collect:
         if config is not None:
             cfg = settings.read(config)
             settings.validate_schema(config)
-            # TODO: below is probably not needed if we use dict.get()
-            cfg = settings.add_missing_keys(cfg)
+            cfg = settings._add_missing_keys(cfg)
             self.config = cfg
-            return
+            # validate bounding box from config
+            coords = settings._validate_bbox(cfg)
+            cfg.update({"target_bbox": coords})
         else:
             self.config = None
             # check minimum requirements: if collection, coords, date_min are
@@ -116,7 +117,7 @@ class collect:
             self.date_max = date_max
             self.buffer = buffer
             self.bound = bound
-            return
+        return
 
     def preprocess(
         self,
