@@ -1,3 +1,14 @@
+## v1.1.0 (2023-01-19)
+
+### Feat
+
+- add `_validate_bbox()` to validate bounding box value(s)
+
+### Fix
+
+- harvest() validation errors (see notes)
+- error when validating a config file containing non-GEE keys
+
 ## v1.0.4 (2023-01-18)
 
 ### Fix
