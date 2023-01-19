@@ -1,17 +1,17 @@
+# eeharvest
+
 [![Project generated with
 PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![codecov](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest/branch/main/graph/badge.svg?token=KOEXHJBR2I)](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest)
-<!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly.
-[![Coveralls](https://img.shields.io/coveralls/github/<USER>/eeharvest/main.svg)](https://coveralls.io/r/<USER>/eeharvest)
 [![PyPI-Server](https://img.shields.io/pypi/v/eeharvest.svg)](https://pypi.org/project/eeharvest/)
-[![Built Status](https://api.cirrus-ci.com/github/<USER>/eeharvest.svg?branch=main)](https://cirrus-ci.com/github/<USER>/eeharvest)
-[![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
-[![Monthly Downloads](https://pepy.tech/badge/eeharvest/month)](https://pepy.tech/project/eeharvest)
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/eeharvest)
--->
 
-# eeharvest
+<!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly. -->
+<!-- [![Coveralls](https://img.shields.io/coveralls/github/<USER>/eeharvest/main.svg)](https://coveralls.io/r/<USER>/eeharvest) -->
+<!-- [![Built Status](https://api.cirrus-ci.com/github/<USER>/eeharvest.svg?branch=main)](https://cirrus-ci.com/github/<USER>/eeharvest) -->
+<!-- [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest) -->
+<!-- [![Monthly Downloads](https://pepy.tech/badge/eeharvest/month)](https://pepy.tech/project/eeharvest) -->
+<!-- [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/eeharvest) -->
 
 The `eeharvest` package was designed to simplify access to Google Earth Engine's
 data catalog through a trio of convenient methods to collect, process and
@@ -19,7 +19,7 @@ download data:
 
 - `preprocess()`: server-side processing, cloud and shadow masking, image
   reduction and calculation of spectral indices
-- `aggregate()`: (work-in-progress) perform additional temporal and/or spatial
+- `aggregate()`: **(work-in-progress)** perform additional temporal and/or spatial
   aggregaton on data
 - `download()`: download data collection(s) to disk without limits on size or
   number of files
