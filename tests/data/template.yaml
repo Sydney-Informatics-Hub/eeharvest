@@ -1,4 +1,4 @@
-infile: ../testdata/Pointdata_Llara.csv
+infile: tests/data/Pointdata_Llara.csv
 outpath: results/
 colname_lat: Lat
 colname_lng: Long

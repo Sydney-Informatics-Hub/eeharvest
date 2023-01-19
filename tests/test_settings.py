@@ -75,7 +75,7 @@ target_sources:
 def test_add_missing_keys(data_path):
     configfile = data_path.joinpath("template.yaml")
     config = settings.read(configfile)
-    newconfig = settings.add_missing_keys(config)
+    newconfig = settings._add_missing_keys(config)
 
     assert newconfig["target_sources"]["GEE"]["preprocess"]["buffer"] is None
     assert newconfig["target_sources"]["GEE"]["preprocess"]["bound"] is None
