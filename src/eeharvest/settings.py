@@ -30,7 +30,7 @@ def validate_schema(path, schema_path=None):
         raise ValueError("Error validating config file against schema file")
 
 
-def add_missing_keys(config):
+def _add_missing_keys(config):
     """Check that the config file has the correct keys and add the keys with
     valeus of None if they are missing"""
     skeleton = {
@@ -58,22 +58,12 @@ def add_missing_keys(config):
         },
     }
 
-    def merge(child, parent):
-        """For a config file, fill in blanks with defaults"""
-
-        d = {}
-        for k in set().union(parent, child):
-            if (
-                k in child
-                and isinstance(child[k], dict)
-                and isinstance(parent[k], dict)
-            ):
-                v = merge(child[k], parent[k])
-            elif k in child:
-                v = child[k]
+    def merge(d1, d2):
+        for key in d2:
+            if key in d1 and isinstance(d1[key], dict) and isinstance(d2[key], dict):
+                merge(d1[key], d2[key])
             else:
-                v = parent[k]
-            d[k] = v
-        return d
+                d1[key] = d2[key]
+        return d1
 
-    return merge(config, skeleton)
+    return merge(skeleton, config)
