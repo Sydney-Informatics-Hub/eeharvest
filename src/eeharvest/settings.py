@@ -1,3 +1,4 @@
+import pandas as pd
 import yamale
 import yaml
 from importlib_resources import files
@@ -67,3 +68,34 @@ def _add_missing_keys(config):
         return d1
 
     return merge(skeleton, config)
+
+
+def _validate_bbox(d, buffer=0.05):
+    """Checks whether a bounding box can be parsed from infile or target_bbox"""
+    # Extract csv from infile using pandas
+    try:
+        df = pd.read_csv(d["infile"])
+    except (FileNotFoundError, ValueError):
+        msg.err("Invalid file path, please check `infile` value in config")
+        raise ValueError("Could not read csv file")
+
+    # Check if target_bbox is defined
+    if d["target_bbox"] is not None:
+        bbox = d["target_bbox"]
+        return bbox
+    elif any(val is None for val in [d["infile"], d["colname_lng"], d["colname_lat"]]):
+        msg.err(
+            "If target_bbox is not defined, infile, colname_lng and"
+            + " colname_lat must be defined"
+        )
+        raise ValueError("Cannot parse bounding box from infile")
+    else:
+        long = d["colname_lng"]
+        lat = d["colname_lat"]
+        bbox = (
+            min(df[long]) - buffer,
+            min(df[lat]) - buffer,
+            max(df[long]) + buffer,
+            max(df[lat]) + buffer,
+        )
+        return bbox
