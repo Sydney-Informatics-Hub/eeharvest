@@ -33,9 +33,7 @@ def initialise(auth_mode="gcloud"):
         if ee.data._credentials:
             msg.success("Earth Engine authenticated")
         else:
-            msg.warn(
-                "Initialisation cancelled. Please check error message"
-            )
+            msg.warn("Initialisation cancelled. Please check error message")
 
 
 class collect:
