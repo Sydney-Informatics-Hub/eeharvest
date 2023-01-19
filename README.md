@@ -13,9 +13,10 @@ PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](ht
 <!-- [![Monthly Downloads](https://pepy.tech/badge/eeharvest/month)](https://pepy.tech/project/eeharvest) -->
 <!-- [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/eeharvest) -->
 
-The `eeharvest` package was designed to simplify access to Google Earth Engine's
-data catalog through a trio of convenient methods to collect, process and
-download data:
+An [Agricultural Research Federation] (AgReFed) project and part of the
+`geodata-harvester` package, the `eeharvest` package simplifies access to
+Google Earth Engine's data catalog with a trio of convenient methods to collect,
+process and download data:
 
 - `preprocess()`: server-side processing, cloud and shadow masking, image
   reduction and calculation of spectral indices
@@ -28,7 +29,9 @@ download data:
 
 ```python
 from eeharvest import harvester
+
 harvester.initialise()
+
 # specify collection, coordinates and date range
 img = harvester.collect(
         collection="LANDSAT/LC08/C02/T1_L2",
@@ -114,3 +117,4 @@ information see CONTRIBUTING.md in this repository.
 [pre-commit]: https://pre-commit.com/
 [pyscaffold]: https://pyscaffold.org/
 [dsproject extension]: https://github.com/pyscaffold/pyscaffoldext-dsproject
+[Agricultural Research Federation]: https://www.agrefed.org.au
