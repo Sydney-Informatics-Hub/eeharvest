@@ -1,3 +1,9 @@
+## v1.2.0 (2023-01-20)
+
+### Feat
+
+- `convert_size()` to calculate file sizes before download
+
 ## v1.1.0 (2023-01-19)
 
 ### Feat
