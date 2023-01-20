@@ -13,19 +13,36 @@ PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](ht
 <!-- [![Monthly Downloads](https://pepy.tech/badge/eeharvest/month)](https://pepy.tech/project/eeharvest) -->
 <!-- [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/eeharvest) -->
 
-An [Agricultural Research Federation] (AgReFed) project and part of the
-`geodata-harvester` package, the `eeharvest` package simplifies access to
-Google Earth Engine's data catalog with a trio of convenient methods to collect,
-process and download data:
+An [Agricultural Research Federation] (AgReFed) project, the `eeharvest` package
+simplifies access to Google Earth Engine and its data catalog with a trio of
+convenient methods to collect, process and download data:
 
 - `preprocess()`: server-side processing, cloud and shadow masking, image
   reduction and calculation of spectral indices
-- `aggregate()`: **(work-in-progress)** perform additional temporal and/or spatial
-  aggregaton on data
+- `aggregate()`: **(work-in-progress)** perform additional temporal aggregaton
+  on data
 - `download()`: download data collection(s) to disk without limits on size or
   number of files
 
-## Example
+## Features
+
+- ✅ **Download** from any dataset available on the [Google Earth Engine Data Catalog]
+- ✅ Perform automatic cloud and shadow **masking** (credit: `eemont`)
+- ✅ **Scale** and **offset** image bands instantly (credit: `eemont`)
+- ✅ **Spatial** aggregation/reduction (e.g. median)
+- ❌ **Temporal** aggregation/reduction (🚧 _in progress_ 🚧)
+- ✅ Quickly calculate from a vast library of **spectral indices**, e.g. NDVI, BAI (credit: [Awesome Spectral Indices])
+- ✅ **Preview** assets instantly using interactive **maps**, including calculated spectral
+  indices (credit: `geemap`)
+- ✅ **Downlod** any number of image assets with (almost) no size limits - _please
+  be sensible with this feature_ (credit:
+  `geedim`)
+- ✅ **Automate** _all_ of the above with the use of **YAML** config files
+
+[Google Earth Engine Data Catalog]: https://developers.google.com/earth-engine/datasets/catalog
+[Awesome Spectral Indices]: https://github.com/awesome-spectral-indices/awesome-spectral-indices
+
+## Examples
 
 ```python
 from eeharvest import harvester
@@ -69,12 +86,12 @@ conda install -c conda-forge gdal google-cloud-sdk
 
 ### Installing dependencies from binaries
 
-If conda is somehow not an option, you can install the dependencies from binaries.
-For GDAL, use `apt-get` or `brew` (macOS). Clear instructions have been written
-on the [rasterio](https://rasterio.readthedocs.io/en/latest/installation.html)
-website, so we won't repeat these here. For the Google Cloud SDK, follow the
-instructions on the [gcloud CLI](https://cloud.google.com/sdk/docs/install)
-page.
+If conda is somehow not an option, you can install the two dependencies from
+binaries. For GDAL, use `apt-get` or `brew` (macOS). Clear instructions have
+been written on the
+[rasterio](https://rasterio.readthedocs.io/en/latest/installation.html) website.
+For the Google Cloud SDK, follow the instructions on the [gcloud
+CLI](https://cloud.google.com/sdk/docs/install) website.
 
 ### Pip
 
@@ -92,12 +109,11 @@ pip install eeharvest
 
 ## Attribution and Acknowledgments
 
-This software was developed by the Sydney Informatics Hub, a core research
+This software was developed by the **[Sydney Informatics Hub]**, a core research
 facility of the University of Sydney, as part of the Data Harvesting project for
-the Agricultural Research Federation (AgReFed).
-AgReFed is supported by the Australian Research Data Commons (ARDC) and the
-Australian Government through the National Collaborative Research Infrastructure
-Strategy (NCRIS).
+the **[Agricultural Research Federation] (AgReFed)**. AgReFed is supported by the
+Australian Research Data Commons (ARDC) and the Australian Government through
+the National Collaborative Research Infrastructure Strategy (NCRIS).
 
 Acknowledgments are an important way for us to demonstrate the value we bring to
 your research. Your research outcomes are vital for ongoing funding of the
@@ -108,13 +124,22 @@ project, please include the following acknowledgment:
 > Facility of the University of Sydney, and the Agricultural Research Federation
 > (AgReFed).
 
+## Credits
+
+- [Google Earth Engine API](https://github.com/google/earthengine-api) - Apache License 2.0
+- [`eemont`](https://github.com/davemlz/eemont) package- MIT license
+- [`geedim`](https://github.com/dugalh/geedim) package - Apache License 2.0
+- [`geemap`](https://github.com/giswqs/geemap) package - MIT License
+- [Awesome Spectral
+  Incices](https://github.com/awesome-spectral-indices/awesome-spectral-indices)
+  \- MIT License
+
 ## Note
 
 This project has been set up using [PyScaffold] 4.3.1 and the [dsproject
-extension] 0.7.2. Developers will also need to install [pre-commit]. For more
-information see CONTRIBUTING.md in this repository.
+extension] 0.7.2. For more information see CONTRIBUTING.md in this repository.
 
-[pre-commit]: https://pre-commit.com/
 [pyscaffold]: https://pyscaffold.org/
 [dsproject extension]: https://github.com/pyscaffold/pyscaffoldext-dsproject
 [Agricultural Research Federation]: https://www.agrefed.org.au
+[Sydney Informatics Hub]: https://www.sydney.edu.au/research/facilities/sydney-informatics-hub.html
