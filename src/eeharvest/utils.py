@@ -199,14 +199,10 @@ def _make_path(dir, filename):
 #     return out
 
 
-def _generate_dir(dir, subfolder=None):
+def _generate_dir(dir):
     """
     Create directory with subfolder if it doesn't exist
     """
-    if subfolder is None:
-        pass
-    else:
-        dir = os.path.join(dir, subfolder)
     if not os.path.exists(dir):
         os.makedirs(dir)
     return dir
