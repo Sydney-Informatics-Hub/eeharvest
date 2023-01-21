@@ -62,7 +62,7 @@ img = harvester.collect(
 # cloud and shadow masking, spatial aggregation, NDVI calculation
 img.preprocess(mask_clouds=True, reduce="median", spectral="NDVI")
 
-# download to disk
+# download to disk (defaults to a "downloads" folder in working directory)
 img.download(bands="NDVI")
 ```
 
@@ -95,17 +95,19 @@ been written on the
 For the Google Cloud SDK, follow the instructions on the [gcloud
 CLI](https://cloud.google.com/sdk/docs/install) website.
 
+### Conda - *recommended*
+
+```sh
+conda install -c conda-forge eeharvest 
+```
+
 ### Pip
 
 ```sh
 pip install eeharvest
 ```
 
-### Conda
 
-```sh
-# conda install -c conda-forge eeharvest # WORK IN PROGRESS
-```
 
 <!-- pyscaffold-notes -->
 
@@ -129,9 +131,9 @@ project, please include the following acknowledgment:
 ## Credits
 
 - [Google Earth Engine API](https://github.com/google/earthengine-api) - Apache License 2.0
-- [`eemont`](https://github.com/davemlz/eemont) package- MIT license
-- [`geedim`](https://github.com/dugalh/geedim) package - Apache License 2.0
-- [`geemap`](https://github.com/giswqs/geemap) package - MIT License
+- `eemont` [package](https://github.com/davemlz/eemont) - MIT license
+- `geedim` [package](https://github.com/dugalh/geedim) - Apache License 2.0
+- `geemap` [package](https://github.com/giswqs/geemap) - MIT License
 - [Awesome Spectral
   Incices](https://github.com/awesome-spectral-indices/awesome-spectral-indices)
   \- MIT License
