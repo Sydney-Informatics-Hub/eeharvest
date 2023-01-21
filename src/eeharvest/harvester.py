@@ -455,7 +455,8 @@ class collect:
             collection = self.collection
             date_min = self.date_min
             date_max = self.date_max
-        # These should already be stored in the class
+            if scale is None:
+                scale = 100
         # Make sure that preprocess has been run
         try:
             img = self.ee_image
