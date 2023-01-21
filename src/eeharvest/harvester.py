@@ -431,7 +431,7 @@ class collect:
             If out_format is not one of 'png', 'jpg', 'tif'.
         """
         msg.title("Running download()")
-        # Check config file
+        # If a config file is set, extract settings from config
         if self.config is not None:
             # Extract settings from config
             cfg = self.config
@@ -456,6 +456,7 @@ class collect:
             date_min = self.date_min
             date_max = self.date_max
         # These should already be stored in the class
+        # Make sure that preprocess has been run
         try:
             img = self.ee_image
         except AttributeError:
