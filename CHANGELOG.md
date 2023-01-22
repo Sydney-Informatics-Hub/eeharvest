@@ -55,7 +55,7 @@
 
 ### BREAKING CHANGE
 
-- the followimg methods now belong to  the harvester module: initialise, get)indices, ee_stac, download_tif,  validate_collections, supported_collections, get_bandinfo
+- the followimg methods now belong to the harvester module: initialise, get)indices, ee_stac, download_tif, validate_collections, supported_collections, get_bandinfo
 
 ### Fix
 
