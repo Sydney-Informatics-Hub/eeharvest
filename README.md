@@ -21,28 +21,43 @@ convenient methods to collect, process and download data:
 
 - `preprocess()`: server-side processing, cloud and shadow masking, image
   reduction and calculation of spectral indices
-- `aggregate()`: **(work-in-progress)** perform additional temporal aggregaton
+- `aggregate()`: **🚧(work-in-progress)🚧** perform additional temporal aggregaton
   on data
 - `download()`: download data collection(s) to disk without limits on size or
   number of files
 
+### Why `eeharvest`?
+
+This package is part of the AgReFed [Geodata-Harvester] project which extends
+the vision of providing Findable, Accessible, Interoperable and Reusable (FAIR)
+agricultural data (and beyond) to Australian researchers and stakeholders. 
+
+The Geodata-Harvester project enables researchers with convenient and reusable
+workflows and provides open-source software for automatic data extraction from a
+wide range of data sources including spatial-temporal processing. The
+`eeharvest` package provides access to data beyond the shores of Australia,
+therefore it has been designed to work as a standalone product for anyone to
+use.
+
 ## Features
 
-- ✅ **Download** from any dataset available on the [Google Earth Engine Data Catalog]
-- ✅ Perform automatic cloud and shadow **masking** (credit: `eemont`)
-- ✅ **Scale** and **offset** image bands instantly (credit: `eemont`)
-- ✅ **Spatial** aggregation/reduction (e.g. median)
-- ❌ **Temporal** aggregation/reduction (🚧 _in progress_ 🚧)
-- ✅ Quickly calculate from a vast library of **spectral indices**, e.g. NDVI, BAI (credit: [Awesome Spectral Indices])
-- ✅ **Preview** assets instantly using interactive **maps**, including calculated spectral
+- [x] **Download** from any dataset available on the [Google Earth Engine Data Catalog]
+- [x] Perform automatic cloud and shadow **masking** (credit: `eemont`)
+- [x] **Scale** and **offset** image bands instantly (credit: `eemont`)
+- [x] **Spatial** aggregation/reduction (e.g. median)
+- [ ] **Temporal** aggregation/reduction (🚧 _in progress_ 🚧)
+- [x] Quickly calculate from a vast library of **spectral indices**, e.g. NDVI, BAI (credit: [Awesome Spectral Indices])
+- [x] **Preview** assets instantly using interactive **maps**, including calculated spectral
   indices (credit: `geemap`)
-- ✅ **Downlod** any number of image assets with (almost) no size limits - _please
+- [x] **Downlod** any number of image assets with (almost) no size limits - _please
   be sensible with this feature_ (credit:
   `geedim`)
-- ✅ **Automate** _all_ of the above with the use of **YAML** config files
+- [x] **Automate** _all_ of the above with the use of **YAML** config files
 
 [Google Earth Engine Data Catalog]: https://developers.google.com/earth-engine/datasets/catalog
-[Awesome Spectral Indices]: https://github.com/awesome-spectral-indices/awesome-spectral-indices
+[Awesome Spectral Indices]:
+    https://github.com/awesome-spectral-indices/awesome-spectral-indices
+[geodata-harvester]: https://github.com/Sydney-Informatics-Hub/geodata-harvester
 
 ## Examples
 
@@ -141,7 +156,7 @@ project, please include the following acknowledgment:
 ## Note
 
 This project has been set up using [PyScaffold] 4.3.1 and the [dsproject
-extension] 0.7.2. For more information see CONTRIBUTING.md in this repository.
+extension] 0.7.2. For more information see [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
 [pyscaffold]: https://pyscaffold.org/
 [dsproject extension]: https://github.com/pyscaffold/pyscaffoldext-dsproject
