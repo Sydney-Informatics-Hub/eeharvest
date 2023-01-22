@@ -1,4 +1,4 @@
-# infile: ../testdata/Pointdata_Llara.csv
+# infile: ../data/raw/Pointdata_Llara.csv
 outpath: ../../dataresults/
 colname_lat: Lat
 colname_lng: Long

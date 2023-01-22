@@ -1,3 +1,15 @@
+## v1.3.0 (2023-01-22)
+
+### Feat
+
+- package is now published on conda-forge - documentation updated
+
+### Fix
+
+- ValueError when scale is not set in `download()` function
+- no directory is created when `outpath` is `None` in `download()`
+- better validation of `target_bbox` and/or `infile` keys
+
 ## v1.2.0 (2023-01-20)
 
 ### Feat
