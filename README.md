@@ -6,6 +6,7 @@ PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](ht
 [![codecov](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest/branch/main/graph/badge.svg?token=KOEXHJBR2I)](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest)
 [![PyPI-Server](https://img.shields.io/pypi/v/eeharvest.svg)](https://pypi.org/project/eeharvest/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
+
 <!-- [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest) -->
 
 <!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly. -->
@@ -30,14 +31,16 @@ convenient methods to collect, process and download data:
 
 This package is part of the AgReFed [Geodata-Harvester] project which extends
 the vision of providing Findable, Accessible, Interoperable and Reusable (FAIR)
-agricultural data (and beyond) to Australian researchers and stakeholders. 
+agricultural data (and beyond) to Australian researchers and stakeholders.
 
-The Geodata-Harvester project enables researchers with convenient and reusable
-workflows and provides open-source software for automatic data extraction from a
-wide range of data sources including spatial-temporal processing. The
-`eeharvest` package provides access to data beyond the shores of Australia,
-therefore it has been designed to work as a standalone product for anyone to
-use.
+There are currently two main packages in the Geodata-Harvester project:
+
+- `geodata-harvester`: a Python package for data extraction and processing from a
+  wide range of data sources in Australia, with support for Google Earth Engine
+  via a dependency on `eeharvest` (see below)
+- `eeharvest`: **this package**, which provides access to Google Earth Engine
+  and is thus designed as a standalone package for anyone to use without the
+  baggage of `geodata-harvester`
 
 ## Features
 
@@ -48,15 +51,14 @@ use.
 - [ ] **Temporal** aggregation/reduction (🚧 _in progress_ 🚧)
 - [x] Quickly calculate from a vast library of **spectral indices**, e.g. NDVI, BAI (credit: [Awesome Spectral Indices])
 - [x] **Preview** assets instantly using interactive **maps**, including calculated spectral
-  indices (credit: `geemap`)
+      indices (credit: `geemap`)
 - [x] **Downlod** any number of image assets with (almost) no size limits - _please
-  be sensible with this feature_ (credit:
-  `geedim`)
+      be sensible with this feature_ (credit:
+      `geedim`)
 - [x] **Automate** _all_ of the above with the use of **YAML** config files
 
 [Google Earth Engine Data Catalog]: https://developers.google.com/earth-engine/datasets/catalog
-[Awesome Spectral Indices]:
-    https://github.com/awesome-spectral-indices/awesome-spectral-indices
+[Awesome Spectral Indices]: https://github.com/awesome-spectral-indices/awesome-spectral-indices
 [geodata-harvester]: https://github.com/Sydney-Informatics-Hub/geodata-harvester
 
 ## Examples
@@ -110,10 +112,10 @@ been written on the
 For the Google Cloud SDK, follow the instructions on the [gcloud
 CLI](https://cloud.google.com/sdk/docs/install) website.
 
-### Conda - *recommended*
+### Conda - _recommended_
 
 ```sh
-conda install -c conda-forge eeharvest 
+conda install -c conda-forge eeharvest
 ```
 
 ### Pip
@@ -121,8 +123,6 @@ conda install -c conda-forge eeharvest
 ```sh
 pip install eeharvest
 ```
-
-
 
 <!-- pyscaffold-notes -->
 
