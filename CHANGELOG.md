@@ -1,3 +1,14 @@
+## v1.4.0 (2023-01-24)
+
+### Feat
+
+- `eeharvest` is now usable in Python 3.8 and above
+- enable optional, direct method calls in `eeharvest`
+
+### Fix
+
+- Error validating config file against schema file #5
+
 ## v1.3.0 (2023-01-22)
 
 ### Feat
