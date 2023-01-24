@@ -41,6 +41,6 @@ target_sources:
       mask_clouds: bool()
       mask_probability: any(null(), required=False)
       reduce: any(enum("median", "mean", "mode", "min", "max", "sum", "stdDev"), null())
-      spectral: any(str(), null(), required=False)
+      spectral: any(str(), list(str()), null(), required=False)
     download:
-      bands: str()
+      bands: any(str(), list(str))
