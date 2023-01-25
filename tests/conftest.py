@@ -38,8 +38,8 @@ def coords():
 
 @pytest.fixture(scope="session", autouse=True)
 def geom_aoi(coords):
-    harvester.initialise()
     """Fixture coordinates converted to an ee.Geometry object"""
+    harvester.initialise()
     return ee.Geometry.Rectangle(coords)
 
 
@@ -55,6 +55,7 @@ def ee_imagecollection(coords):
 @pytest.fixture(scope="session", autouse=True)
 def ee_image(ee_imagecollection):
     """Fixture for an ee.Image"""
+    harvester.initialise()
     return ee_imagecollection.first()
 
 

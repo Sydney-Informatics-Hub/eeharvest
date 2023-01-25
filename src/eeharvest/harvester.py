@@ -1,4 +1,5 @@
 # import datetime  # for date parsing, but check later if this is needed
+import base64
 import json
 import os
 import urllib
@@ -13,27 +14,65 @@ from tqdm.notebook import tqdm
 from eeharvest import arc2meter, msg, settings, utils
 
 
-def initialise(auth_mode="gcloud"):
+def initialise(token_name="EARTHENGINE_TOKEN", auth_mode="gcloud"):
     """
     Initialise Google Earth Engine API
 
     Try to initialise Google Earth Engine API. If it fails, the user is prompted
     to authenticate through the command line interface.
     """
-    # Check if initialised:
-    if ee.data._credentials:
-        msg.warn("Earth Engine API already authenticated")
-    else:
-        with msg.spin("Initialising Earth Engine...") as s:
+    with msg.spin("Initialising Earth Engine...") as s:
+        if ee.data._credentials is None:
             try:
-                geemap.ee_initialize(auth_mode=auth_mode)
-            except Exception as e:
-                print(e)
-            s()
-        if ee.data._credentials:
-            msg.success("Earth Engine authenticated")
-        else:
-            msg.warn("Initialisation cancelled. Please check error message")
+                token = os.environ[token_name]
+                if token is not None:
+                    content = base64.b64decode(token).decode()
+                    with open("ee_private_key.json", "w") as f:
+                        f.write(content)
+                    service_account = "my-service-account@...gserviceaccount.com"
+                    credentials = ee.ServiceAccountCredentials(
+                        service_account, "ee_private_key.json"
+                    )
+                    ee.Initialize(credentials)
+            except Exception:
+                geemap.ee_initialize(auth_mode)
+        s()
+
+
+# def initialise(token_name="EARTHENGINE_TOKEN", auth_mode="gcloud"):
+#     """
+#     Initialise Google Earth Engine API
+
+#     Try to initialise Google Earth Engine API. If it fails, the user is prompted
+#     to authenticate through the command line interface.
+#     """
+#     # Check if initialised:
+#     if "EARTHENGINE_TOKEN" in os.environ:
+#         # key need to be decoded in a file to work
+#         content = base64.b64decode(os.environ["EARTHENGINE_TOKEN"]).decode()
+#         with open("ee_private_key.json", "w") as f:
+#             f.write(content)
+
+#         # connection to the service account
+#         service_account = "my-service-account@...gserviceaccount.com"
+#         credentials = ee.ServiceAccountCredentials(
+#             service_account, "ee_private_key.json"
+#         )
+#         ee.Initialize(credentials)
+#     else:
+#         if ee.data._credentials:
+#             msg.warn("Earth Engine API already authenticated")
+#         else:
+#             with msg.spin("Initialising Earth Engine...") as s:
+#                 try:
+#                     geemap.ee_initialize(auth_mode=auth_mode)
+#                 except Exception as e:
+#                     print(e)
+#                 s()
+#             if ee.data._credentials:
+#                 msg.success("Earth Engine authenticated")
+#             else:
+#                 msg.warn("Initialisation cancelled. Please check error message")
 
 
 # For the people in USA :|
