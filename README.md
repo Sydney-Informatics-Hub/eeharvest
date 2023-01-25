@@ -66,12 +66,12 @@ There are currently two main packages in the Geodata-Harvester project:
 ## Examples
 
 ```python
-from eeharvest import harvester
+import eeharvest
 
-harvester.initialise()
+eeharvest.initialise()
 
 # specify collection, coordinates and date range
-img = harvester.collect(
+img = eeharvest.collect(
         collection="LANDSAT/LC08/C02/T1_L2",
         coords=[149.799, -30.31, 149.80, -30.309],
         date_min="2019-01-01",
