@@ -5,9 +5,11 @@ PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](ht
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![codecov](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest/branch/main/graph/badge.svg?token=KOEXHJBR2I)](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest)
 [![PyPI-Server](https://img.shields.io/pypi/v/eeharvest.svg)](https://pypi.org/project/eeharvest/)
-[![Conda Version](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
-
-<!-- [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest) -->
+[![Conda
+Version](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
+[![Conda
+Downloads](https://img.shields.io/conda/dn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
+![GitHub last commit](https://img.shields.io/github/last-commit/Sydney-Informatics-Hub/eeharvest)
 
 <!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly. -->
 <!-- [![Coveralls](https://img.shields.io/coveralls/github/<USER>/eeharvest/main.svg)](https://coveralls.io/r/<USER>/eeharvest) -->
