@@ -36,6 +36,10 @@ def initialise(auth_mode="gcloud"):
             msg.warn("Initialisation cancelled. Please check error message")
 
 
+# For the people in USA :|
+initialize = initialise
+
+
 class collect:
     """
     A class to manipulate Google Earth Engine objects
@@ -197,6 +201,15 @@ class collect:
             .filterBounds(aoi)
             .filterDate(str(date_min), str(date_max))
         )
+        # How many images?
+        count = img.size()
+        msg.info(f"Number of image(s) found: {count.getInfo()}")
+
+        # Stop if no images found
+        if count.getInfo() == 0:
+            msg.err("Can't process zero images. Processing stopped")
+            raise ValueError("No image to process, check your date range")
+
         # Cloud and shadow masking
         if mask_clouds:
             with msg.spin("Applying scale, offset and cloud masks...") as s:
