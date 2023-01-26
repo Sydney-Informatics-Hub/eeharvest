@@ -40,10 +40,10 @@ There are currently three packages that have been produced under AgReFed:
   wide range of data sources in Australia, with support for Google Earth Engine
   via a dependency on `eeharvest` (see below)
 - 🐍 `eeharvest`: **this package**, which provides access to Google Earth Engine
-  and is thus designed as a standalone package for anyone to use without the
-  baggage of `geodata-harvester`
+  and is designed to work as a standalone package
 - `dataharvester`: an R package that replicates the functionality of
-  `geodata-harvester`, but using R fundamentals and syntax
+  `geodata-harvester`, but with additional support for functional R programming
+  and the tidyverse
 
 ## `eeharvest` features
 
