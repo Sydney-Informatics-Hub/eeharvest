@@ -28,7 +28,7 @@ convenient methods to collect, process and download data:
 
 **Bonus**: use `map()` to preview assets in an interactive map (credit: `geemap`)
 
-### Why `eeharvest`?
+## Why `eeharvest`?
 
 This package is part of the AgReFed [Geodata-Harvester] project which extends
 the vision of providing Findable, Accessible, Interoperable and Reusable (FAIR)
@@ -45,20 +45,20 @@ There are currently three packages that have been produced under AgReFed:
   `geodata-harvester`, but with additional support for functional R programming
   and the tidyverse
 
-## `eeharvest` features
+## Features
 
-- [x] **Download** from any dataset available on the [Google Earth Engine Data Catalog]
-- [x] Perform automatic cloud and shadow **masking** (credit: `eemont`)
-- [x] **Scale** and **offset** image bands instantly (credit: `eemont`)
-- [x] **Spatial** aggregation/reduction (e.g. median)
-- [ ] **Temporal** aggregation/reduction (🚧 _in progress_ 🚧)
-- [x] Quickly calculate from a vast library of **spectral indices**, e.g. NDVI, BAI (credit: [Awesome Spectral Indices])
-- [x] **Preview** assets instantly using interactive **maps**, including calculated spectral
-      indices (credit: `geemap`)
-- [x] **Downlod** any number of image assets with (almost) no size limits - _please
-      be sensible with this feature_ (credit:
-      `geedim`)
-- [x] **Automate** _all_ of the above with the use of **YAML** config files
+- ✅ **Download** from any dataset available on the [Google Earth Engine Data Catalog]
+- ✅ Perform automatic cloud and shadow **masking** (credit: `eemont`)
+- ✅ **Scale** and **offset** image bands instantly (credit: `eemont`)
+- ✅ **Spatial** aggregation/reduction (e.g. median)
+- ❌ **Temporal** aggregation/reduction (🚧 _work-in-progress_ 🚧)
+- ✅ Quickly calculate from a vast library of **spectral indices**, e.g. NDVI, BAI (credit: [Awesome Spectral Indices])
+- ✅ **Preview** assets instantly using interactive **maps**, including calculated spectral
+  indices (credit: `geemap`)
+- ✅ **Downlod** any number of image assets with (almost) no size limits - _please
+  be sensible with this feature_ (credit:
+  `geedim`)
+- ✅ **Automate** _all_ of the above with the use of **YAML** config files
 
 [Google Earth Engine Data Catalog]: https://developers.google.com/earth-engine/datasets/catalog
 [Awesome Spectral Indices]: https://github.com/awesome-spectral-indices/awesome-spectral-indices
@@ -114,14 +114,15 @@ conda install -c conda-forge gdal google-cloud-sdk
 If conda is somehow not an option, you can install the two dependencies from
 binaries. For GDAL, use `apt-get` or `brew` (macOS). Clear instructions have
 been written on the
-[rasterio](https://rasterio.readthedocs.io/en/latest/installation.html) website.
+[rasterio](https://rasterio.readthedocs.io/en/latest/installation.html) and [PyPi
+GDAL](https://pypi.org/project/GDAL/) websites.
 For the Google Cloud SDK, follow the instructions on the [gcloud
 CLI](https://cloud.google.com/sdk/docs/install) website.
 
 ### Conda - _recommended_
 
 ```sh
-conda install -c conda-forge eeharvest --force-reinstall
+conda install -c conda-forge eeharvest
 ```
 
 ### Pip
