@@ -1,22 +1,19 @@
 # eeharvest
 
+<p align="center">
+  <a href="https://github.com/Sydney-Informatics-Hub/eeharvest"><img src="https://github.com/Sydney-Informatics-Hub/eeharvest/blob/main/docs/_static/eeharvest.png" alt="header" width="200"></a>
+</p>
+
 [![Project generated with
 PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![codecov](https://codecov.io/github/Sydney-Informatics-Hub/eeharvest/branch/main/graph/badge.svg?token=KOEXHJBR2I)](https://codecov.io/github/Sydney-Informatics-Hub/eeharvest)
 [![PyPI-Server](https://img.shields.io/pypi/v/eeharvest.svg)](https://pypi.org/project/eeharvest/)
 [![Conda
 Version](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
-[![Conda
-Downloads](https://img.shields.io/conda/dn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest)
-![GitHub last commit](https://img.shields.io/github/last-commit/Sydney-Informatics-Hub/eeharvest)
-
-<!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly. -->
-<!-- [![codecov](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest/branch/main/graph/badge.svg?token=KOEXHJBR2I)](https://codecov.io/gh/Sydney-Informatics-Hub/eeharvest) -->
-<!-- [![Coveralls](https://img.shields.io/coveralls/github/<USER>/eeharvest/main.svg)](https://coveralls.io/r/<USER>/eeharvest) -->
-<!-- [![Built Status](https://api.cirrus-ci.com/github/<USER>/eeharvest.svg?branch=main)](https://cirrus-ci.com/github/<USER>/eeharvest) -->
-<!-- [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://anaconda.org/conda-forge/eeharvest) -->
-<!-- [![Monthly Downloads](https://pepy.tech/badge/eeharvest/month)](https://pepy.tech/project/eeharvest) -->
-<!-- [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/eeharvest) -->
+[![Monthly Downloads](https://pepy.tech/badge/eeharvest/month)](https://pepy.tech/project/eeharvest)
+![GitHub last
+commit](https://img.shields.io/github/last-commit/Sydney-Informatics-Hub/eeharvest)
 
 An [Agricultural Research Federation] (AgReFed) project, the `eeharvest` package
 simplifies access to Google Earth Engine and its data catalog with a trio of
@@ -29,22 +26,26 @@ convenient methods to collect, process and download data:
 - `download()`: download data collection(s) to disk without limits on size or
   number of files
 
+**Bonus**: use `map()` to preview assets in an interactive map (credit: `geemap`)
+
 ### Why `eeharvest`?
 
 This package is part of the AgReFed [Geodata-Harvester] project which extends
 the vision of providing Findable, Accessible, Interoperable and Reusable (FAIR)
 agricultural data (and beyond) to Australian researchers and stakeholders.
 
-There are currently two main packages in the Geodata-Harvester project:
+There are currently three packages that have been produced under AgReFed:
 
-- `geodata-harvester`: a Python package for data extraction and processing from a
+- 🐍 `geodata-harvester`: a Python package for data extraction and processing from a
   wide range of data sources in Australia, with support for Google Earth Engine
   via a dependency on `eeharvest` (see below)
-- `eeharvest`: **this package**, which provides access to Google Earth Engine
+- 🐍 `eeharvest`: **this package**, which provides access to Google Earth Engine
   and is thus designed as a standalone package for anyone to use without the
   baggage of `geodata-harvester`
+- `dataharvester`: an R package that replicates the functionality of
+  `geodata-harvester`, but using R fundamentals and syntax
 
-## Features
+## `eeharvest` features
 
 - [x] **Download** from any dataset available on the [Google Earth Engine Data Catalog]
 - [x] Perform automatic cloud and shadow **masking** (credit: `eemont`)
@@ -80,6 +81,9 @@ img = eeharvest.collect(
 
 # cloud and shadow masking, spatial aggregation, NDVI calculation
 img.preprocess(mask_clouds=True, reduce="median", spectral="NDVI")
+
+# visualise (optional, but fun)
+img.map(bands="NDVI")
 
 # download to disk (defaults to a "downloads" folder in working directory)
 img.download(bands="NDVI")
@@ -117,13 +121,13 @@ CLI](https://cloud.google.com/sdk/docs/install) website.
 ### Conda - _recommended_
 
 ```sh
-conda install -c conda-forge eeharvest
+conda install -c conda-forge eeharvest --force-reinstall
 ```
 
 ### Pip
 
 ```sh
-pip install eeharvest
+pip install -U eeharvest
 ```
 
 <!-- pyscaffold-notes -->
