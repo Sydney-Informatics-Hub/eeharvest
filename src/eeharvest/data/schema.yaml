@@ -35,7 +35,7 @@ date_max: any(day(), int(), required=False)
 target_sources:
   GEE:
     preprocess:
-      collection: str()
+      collection: any(str(), list(str))
       buffer: any(int(), null(), required=False)
       bound: any(bool(), null(), required=False)
       mask_clouds: bool()
