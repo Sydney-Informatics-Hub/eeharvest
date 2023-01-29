@@ -132,7 +132,11 @@ class collect:
     ):
         # Check if config is a path to a file or a dictionary and read it
         if config is not None:
-            cfg = settings.read(config)
+            try:
+                cfg = settings.read(config)
+            except TypeError:
+                if type(config) is dict:
+                    cfg = config
             settings.validate_schema(config)
             cfg = settings._add_missing_keys(cfg)
             self.config = cfg
