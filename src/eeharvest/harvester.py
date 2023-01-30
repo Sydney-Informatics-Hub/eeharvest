@@ -37,6 +37,7 @@ def initialise(token_name="EARTHENGINE_TOKEN", auth_mode="gcloud"):
             except Exception:
                 geemap.ee_initialize(auth_mode)
         s()
+    msg.success("Done")
 
 
 # def initialise(token_name="EARTHENGINE_TOKEN", auth_mode="gcloud"):
