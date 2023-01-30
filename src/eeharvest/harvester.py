@@ -236,6 +236,9 @@ class collect:
             mask_clouds = gee_cfg["mask_clouds"]
             reduce = gee_cfg["reduce"]
             spectral = gee_cfg["spectral"]
+        # Make sure collection is a string
+        if isinstance(collection, list) and len(collection) == 1:
+            collection = collection[0]
         # Let's start ----------------------------------------------------------
         # Define the collection, and filter by aoi
         aoi = ee.Geometry.Rectangle(coords)
@@ -544,8 +547,12 @@ class collect:
             scale = round(xres_meters, 1)
 
         # Use attributes to generate filename hash
+        new_bands = [new_bands] if isinstance(new_bands, str) else new_bands
+        # Make sure collection is a string
+        if isinstance(collection, list) and len(collection) == 1:
+            collection = collection[0]
         hash = utils._generate_hash(
-            collection, date_min, date_max, bands, reduce, scale
+            collection, date_min, date_max, new_bands, reduce, scale
         )
         filename = f"ee_{''.join(collection.split('/')[0])}_{hash}.tif"
 
