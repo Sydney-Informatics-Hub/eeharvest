@@ -253,7 +253,7 @@ class collect:
         msg.info(f"Number of image(s) found: {count.getInfo()}")
 
         # Stop if no images found
-        if count.getInfo() == 0:
+        if count.getInfo() < 1:
             msg.err("Can't process zero images. Processing stopped")
             raise ValueError("No image to process, check your date range")
 
