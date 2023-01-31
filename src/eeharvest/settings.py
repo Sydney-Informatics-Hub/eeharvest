@@ -105,3 +105,18 @@ def _validate_bbox(d, buffer=0.05):
             max(df[lat]) + buffer,
         )
         return bbox
+
+
+def _detect_multi_collection(config):
+    """
+    Detects whether multiple collections are specified in the config file.
+
+    If True, there are multiple collections.
+    """
+    if isinstance(config["target_sources"]["GEE"]["preprocess"]["collection"], list):
+        if len(config["target_sources"]["GEE"]["preprocess"]["collection"]) > 1:
+            return True
+        else:
+            return False
+    else:
+        return False
