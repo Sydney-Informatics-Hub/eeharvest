@@ -307,3 +307,12 @@ def convert_size(size_bytes):
 #     start = str(date[0]) + "-01-01"
 #     end_date = str(date[0]) + "-12-31"
 #     return start, end_date
+
+
+def _reduce_by_string(img, by="median"):
+    """Reduce an ee.ImageCollection to a single ee.Image by evaluating a string"""
+    if by.find("(") != -1:
+        fun = "img.reduce(ee.Reducer." + by + ")"
+    else:
+        fun = "img.reduce(ee.Reducer." + by + "())"
+    return eval(fun)
