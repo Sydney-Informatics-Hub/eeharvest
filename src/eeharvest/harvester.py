@@ -170,7 +170,7 @@ class collect:
     def preprocess(
         self,
         mask_clouds=True,
-        mask_probability=60,
+        mask_probability=None,
         reduce="median",
         spectral=None,
         clip=True,
@@ -260,7 +260,9 @@ class collect:
         # Cloud and shadow masking
         if mask_clouds:
             with msg.spin("Applying scale, offset and cloud masks...") as s:
-                img = img.scaleAndOffset().maskClouds(prob=mask_probability)
+                if mask_probability is None:
+                    mask_probability = 60
+                img.scaleAndOffset().maskClouds(prob=mask_probability)
                 s(1)
         # Calculate spectral indices
         if spectral is not None:
