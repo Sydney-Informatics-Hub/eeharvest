@@ -278,18 +278,8 @@ class collect:
 
             img = img.map(clip_all)
         # Reduce image collection
-        reducers = ["median", "mean", "sum", "mode", "max", "min", "mosaic"]
-        if reduce is None:
-            msg.info("Skipping image reduction")
-        elif reduce in reducers:
-            with msg.spin(f"Reducing image pixels by {reduce}") as s:
-                func = getattr(img, reduce)
-                img = func()
-                s(1)
-        else:
-            raise ValueError(
-                f"Reducer {reduce} not supported, please use one of {reducers}"
-            )
+        if reduce is not None:
+            img = utils._reduce_by_string(img, reduce)
         # Store attributes
         self.ee_image = img
         self.collection = collection
