@@ -497,13 +497,14 @@ class collect:
             scale = cfg["target_res"]
             # If outpath is None, check if it's set in the config. If not, use
             # default location of `downloads` folder in working directory
-            if outpath is not None:
-                pass
-            elif cfg["outpath"] is not None:
-                outpath = cfg["outpath"]
-            else:
-                outpath = os.path.join(os.getcwd(), "downloads")
+            if outpath is None:
+                if cfg["outpath"] is not None:
+                    outpath = cfg["outpath"]
+                else:
+                    outpath = "downloads"
         else:
+            if outpath is None:
+                outpath = "downloads"
             collection = self.collection
             date_min = self.date_min
             date_max = self.date_max
