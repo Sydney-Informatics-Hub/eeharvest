@@ -316,3 +316,18 @@ def _reduce_by_string(img, by="median"):
     else:
         fun = "img.reduce(ee.Reducer." + by + "())"
     return eval(fun)
+
+
+def _update_nested(source, *new_mappings):
+    updated_source = source.copy()
+    for new_map in new_mappings:
+        for k, v in new_map.items():
+            if (
+                k in updated_source
+                and isinstance(updated_source[k], dict)
+                and isinstance(v, dict)
+            ):
+                updated_source[k] = _update_nested(updated_source[k], v)
+            else:
+                updated_source[k] = v
+    return updated_source
