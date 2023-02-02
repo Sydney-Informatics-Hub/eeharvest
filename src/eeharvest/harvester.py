@@ -570,15 +570,62 @@ class collect:
 
 
 def auto(config, outpath=None):
-    """Run all steps of the GEE download process when a configuration YAML file
-    is supplied."""
-    img = collect(config=config)
-    img.preprocess()
-    if outpath is None:
-        img.download()
+    cfg = settings.read(config)
+    multi = settings._detect_multi_collection(cfg)
+    if multi:
+        collections = cfg["target_sources"]["GEE"]["preprocess"]["collection"]
+        num_configs = len(collections)
+        msg.info("Multiple collections detected in Google Earth Engine config file")
+        msg.info(
+            f"Validating settings and generating {num_configs} configuration profiles"
+        )
+
+        # Validate bands
+        bands = cfg["target_sources"]["GEE"]["download"]["bands"]
+        if all(isinstance(i, list) for i in bands):
+            for (n, i, j) in zip(range(1, num_configs + 1), collections, bands):
+                print(f"  Profile {n} will process '{i}' and download bands {j}")
+        else:
+            msg.err(
+                "For each collection, you need to add a list of bands to download in a \n"
+                "  list of lists e.g. [['B2', 'B3', 'B4'], ['SR_B1', 'SR_B2', 'SR_B3']]"
+            )
+            raise ValueError(
+                "Invalid bands list, must be a list of lists if a list of image collections"
+                " is provided"
+            )
+
+        # Generate new configs
+        new_configs = []
+        for (n, i, j) in zip(range(1, num_configs + 1), collections, bands):
+            new_config = utils._update_nested(
+                cfg, {"target_sources": {"GEE": {"preprocess": {"collection": i}}}}
+            )
+            new_config = utils._update_nested(
+                new_config, {"target_sources": {"GEE": {"download": {"bands": j}}}}
+            )
+            new_configs.append(new_config)
+
+        # Process and download
+        img_list = []
+        for (n, i) in zip(range(1, num_configs + 1), new_configs):
+            msg.info(
+                f"-------------------- Downloading Profile {n} --------------------"
+            )
+            img = collect(config=i)
+            img.preprocess()
+            img.download(outpath=outpath)
+            img_list.append(img)
+        return img_list
     else:
-        img.download(outpath=outpath)
-    return img
+        # download single collection
+        img = collect(config=config)
+        img.preprocess()
+        if outpath is None:
+            img.download()
+        else:
+            img.download(outpath=outpath)
+        return img
 
 
 def get_indices() -> dict:
