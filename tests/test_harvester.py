@@ -5,7 +5,7 @@ import os.path
 import eemont
 import pytest
 
-from eeharvest import harvester
+from eeharvest import harvester, settings
 
 
 def test_collect_stops_when_minimum_args_not_provided(capsys):
@@ -163,6 +163,23 @@ def test_auto_just_works(tmp_path):
             if file.endswith(".tif"):
                 tif_exists = True
     assert tif_exists is True
+
+
+def test_auto_can_handle_multiple_collections(tmp_path):
+    img = harvester.auto(config="tests/data/multi.yaml", outpath=tmp_path)
+
+    tif_exists = False
+    for root, dirs, files in os.walk(tmp_path):
+        for file in files:
+            if file.endswith(".tif"):
+                tif_exists = True
+    assert tif_exists is True
+
+
+def test_auto_validates_bands_poperly():
+    with pytest.raises(ValueError) as excinfo:
+        img = harvester.auto(config="tests/data/multi_bad_band.yaml")
+    assert "Invalid bands" in str(excinfo.value)
 
 
 def test_download_returns_None_if_no_bands_provided(capsys, to_harvest):
