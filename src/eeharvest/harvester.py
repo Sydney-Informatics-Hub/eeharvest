@@ -518,15 +518,22 @@ class collect:
         aoi = self.aoi
         reduce = self.reduce
         # Check if bands are set
+        all_bands = get_bandinfo(img)
         if bands is None:
-            all_bands = get_bandinfo(img)
             msg.err("No bands defined")
             msg.info("Please select one or more bands to download image:")
             msg.info(str(all_bands))
             return
         else:
-            img = img.select(bands)
-            msg.info(f"Band(s) selected: {bands}")
+            # Match bands if they were modified by "reduce" in preprocess()
+            new_bands = []
+            for item in all_bands:
+                for sub_item in bands:
+                    if item.startswith(sub_item + "_"):
+                        new_bands.append(item)
+                        break
+            img = img.select(new_bands)
+            msg.info(f"Band(s) selected: {new_bands}")
 
         # Convert scale from arsec to meters (if from config file)
         if self.config is None:
