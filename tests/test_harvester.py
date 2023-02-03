@@ -195,3 +195,15 @@ def test_collect_accepts_config_dict():
     cfg = settings.read("tests/data/template.yaml")
     img = harvester.collect(config=cfg)
     assert type(img.config) is dict
+
+
+def test_preprocess_stops_if_zero_images_found_in_image_collection():
+    img = harvester.collect(
+        collection="LANDSAT/LC08/C02/T1_L2",
+        coords=[149.799, -30.31, 149.80, -30.309],
+        date_min="2019-01-01",
+        date_max="2019-01-02",
+    )
+    with pytest.raises(ValueError) as excinfo:
+        img.preprocess()
+    assert "No image to process" in str(excinfo.value)
