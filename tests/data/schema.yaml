@@ -35,12 +35,12 @@ date_max: any(day(), int(), required=False)
 target_sources:
   GEE:
     preprocess:
-      collection: str()
+      collection: any(str(), list(str))
       buffer: any(int(), null(), required=False)
       bound: any(bool(), null(), required=False)
       mask_clouds: bool()
       mask_probability: any(null(), required=False)
       reduce: any(enum("median", "mean", "mode", "min", "max", "sum", "stdDev"), null())
-      spectral: any(str(), null(), required=False)
+      spectral: any(str(), list(str()), null(), required=False)
     download:
-      bands: str()
+      bands: any(str(), list(str))
