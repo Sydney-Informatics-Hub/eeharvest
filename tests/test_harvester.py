@@ -189,3 +189,9 @@ def test_download_returns_None_if_no_bands_provided(capsys, to_harvest):
     to_harvest.download(bands=None)
     captured = capsys.readouterr()
     assert "No bands" in captured.out
+
+
+def test_collect_accepts_config_dict():
+    cfg = settings.read("tests/data/template.yaml")
+    img = harvester.collect(config=cfg)
+    assert type(img.config) is dict
