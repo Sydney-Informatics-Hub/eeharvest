@@ -138,6 +138,8 @@ class collect:
             except TypeError:
                 if type(config) is dict:
                     cfg = config
+                else:
+                    raise TypeError("`config` should be a path or a dictionary")
             settings.validate_schema(config)
             cfg = settings._add_missing_keys(cfg)
             self.config = cfg
