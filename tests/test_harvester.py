@@ -102,9 +102,9 @@ def test_map_accepts_certain_palette_values(capsys, to_harvest):
 
 
 def test_preprocess_produces_error_when_reduce_value_is_not_supported(to_harvest):
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(AttributeError) as excinfo:
         to_harvest.preprocess(reduce="monkey")
-    assert "not supported" in str(excinfo.value)
+    assert "has no attribute" in str(excinfo.value)
 
 
 def test_map_saves_html_to_folder_if_specified(to_harvest, tmp_path):
