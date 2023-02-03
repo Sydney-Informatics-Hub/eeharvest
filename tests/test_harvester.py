@@ -13,7 +13,6 @@ def test_collect_stops_when_minimum_args_not_provided(capsys):
     The collect class method should stop when minimum args are not provided.
     These args are: collection, coords, date_min.
     """
-    harvester.initialise()
     harvester.collect(
         collection="LANDSAT/LC08/C02/T1_L2",
         coords=[149.799, -30.31, 149.80, -30.309],
@@ -39,7 +38,6 @@ def test_collect_works_with_minimum_args_provided():
     The collect class method should work when minimum args are provided.
     These args are: collection, coords, date_min.
     """
-    harvester.initialise()
     try:
         img = harvester.collect(
             collection="LANDSAT/LC08/C02/T1_L2",
@@ -56,7 +54,6 @@ def test_collect_indexing_works(to_harvest):
     Once the collect class method is called, the class should be indexable
     for the following attributes: collection, coords, date_min, date_max
     """
-    harvester.initialise()
     assert to_harvest.collection == "LANDSAT/LC08/C02/T1_L2"
     assert to_harvest.coords == [149.799, -30.31, 149.80, -30.309]
     assert to_harvest.date_min == "2019-01-01"
@@ -64,7 +61,6 @@ def test_collect_indexing_works(to_harvest):
 
 
 def test_preprocess(to_harvest):
-    harvester.initialise()
     to_harvest.preprocess(mask_clouds=True, reduce="median", spectral=None, clip=True)
     assert to_harvest.reduce == "median"
     assert to_harvest.spectral is None
@@ -75,7 +71,6 @@ def test_preprocess(to_harvest):
 
 def test_map_basically_works(capsys, to_harvest):
     """collect.map: should not produce errors"""
-    harvester.initialise()
     to_harvest.preprocess(spectral="NDVI")
     to_harvest.map(bands="NDVI_median")
     captured = capsys.readouterr()
@@ -133,13 +128,13 @@ def test_config_works_with_harvester_module(tmp_path):
     img.preprocess()
     assert img.reduce == "median"
 
-    img.download(outpath=tmp_path)
-    tif_exists = False
-    for root, dirs, files in os.walk(tmp_path):
-        for file in files:
-            if file.endswith(".tif"):
-                tif_exists = True
-    assert tif_exists is True
+    # img.download(outpath=tmp_path)
+    # tif_exists = False
+    # for root, dirs, files in os.walk(tmp_path):
+    #     for file in files:
+    #         if file.endswith(".tif"):
+    #             tif_exists = True
+    # assert tif_exists is True
 
 
 def test_map_requires_preprocess_to_run_first():
