@@ -20,6 +20,8 @@ def initialise(token_name="EARTHENGINE_TOKEN", auth_mode="gcloud"):
 
     Try to initialise Google Earth Engine API. If it fails, the user is prompted
     to authenticate through the command line interface.
+
+    Now accepts service tokens as well for use with testing and CI/CD.
     """
     with msg.spin("Initialising Earth Engine...") as s:
         if ee.data._credentials is None:
