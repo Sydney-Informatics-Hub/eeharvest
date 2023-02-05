@@ -396,8 +396,6 @@ class collect:
                     self.ee_image, self.aoi, bands, by="sd", scale=100
                 )
                 s(1)
-        else:
-            pass
         param = dict(
             min=minmax[0],
             max=minmax[1],
