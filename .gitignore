@@ -52,3 +52,7 @@ MANIFEST
 .venv*/
 .conda*/
 .python-version
+
+# configs
+.isort.cfg
+.pre-commit-config.yaml
