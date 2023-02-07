@@ -25,7 +25,8 @@ def validate_schema(path, schema_path=None):
         data = yamale.make_data(content=str(path))
     try:
         yamale.validate(schema, data, strict=False)
-        msg.success("YAML schema validated")
+        # msg.success("YAML schema validated")
+        return True
     except yamale.YamaleError as e:
         msg.err(f"{type(e).__name__}" + f"{e}")
         raise ValueError("Error validating config file against schema file")

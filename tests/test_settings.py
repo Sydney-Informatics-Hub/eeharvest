@@ -13,15 +13,13 @@ def test_read_config_works_and_can_be_indexed():
     assert config["colname_lat"] == "Lat"  # config can be indexed
 
 
-def test_validate_schema_validates_error_free_file_with_schema_file(capsys):
+def test_validate_schema_validates_error_free_file_with_schema_file():
     """
     validate_schema: should validate a config file with a schema file
     """
     configfile = "tests/data/template.yaml"
     schemafile = "tests/data/schema.yaml"
-    settings.validate_schema(configfile, schemafile)
-    captured = capsys.readouterr()
-    assert "validated" in captured.out
+    assert settings.validate_schema(configfile, schemafile) is True
 
 
 def test_validate_schema_validates_string_with_schema_file():
