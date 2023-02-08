@@ -17,4 +17,4 @@ target_sources:
       reduce: median
       spectral: NDVI
     download:
-      bands: [NDVI]
+      bands: NDVI
