@@ -512,6 +512,7 @@ class collect:
             date_max = self.date_max
             if scale is None:
                 scale = 100
+        bands = [bands] if isinstance(bands, str) else bands
         # Make sure that preprocess has been run
         try:
             img = self.ee_image
