@@ -233,6 +233,13 @@ class collect:
             cfg = self.config
             gee_cfg = cfg["target_sources"]["GEE"]["preprocess"]
             collection = gee_cfg["collection"]
+            if type(collection) is list and len(collection) > 1:
+                msg.err(
+                    "cannot process more than one collection at a time, "
+                    "perhaps you meant to use `auto()`? Please check configuration YAML "
+                    "and make sure that `collection` is a string and not a list"
+                )
+                raise TypeError("can only process one collection at a time")
             coords = cfg["target_bbox"]
             date_min = cfg["date_min"]
             date_max = cfg["date_max"]
