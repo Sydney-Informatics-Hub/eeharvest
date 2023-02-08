@@ -575,7 +575,7 @@ class collect:
 class AutoResult:
     def __init__(self, obj, filenames):
         self.obj = obj
-        self.filenames = filenames
+        self.filenames = [filenames] if isinstance(filenames, str) else filenames
 
 
 def auto(config, outpath=None):
