@@ -571,6 +571,12 @@ class collect:
         return img
 
 
+class AutoResult:
+    def __init__(self, obj, filenames):
+        self.obj = obj
+        self.filenames = filenames
+
+
 def auto(config, outpath=None):
     cfg = settings.read(config)
     multi = settings._detect_multi_collection(cfg)
@@ -618,7 +624,8 @@ def auto(config, outpath=None):
             img.preprocess()
             img.download(outpath=outpath)
             img_list.append(img)
-        return img_list
+        filenames = [i.filenames for i in img_list]
+        return AutoResult(img_list, filenames)
     else:
         # download single collection
         img = collect(config=config)
@@ -627,7 +634,8 @@ def auto(config, outpath=None):
             img.download()
         else:
             img.download(outpath=outpath)
-        return img
+        filenames = img.filenames
+        return AutoResult(img, filenames)
 
 
 def get_indices() -> dict:
