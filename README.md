@@ -16,7 +16,7 @@ Version](https://img.shields.io/conda/vn/conda-forge/eeharvest.svg)](https://ana
 commit](https://img.shields.io/github/last-commit/Sydney-Informatics-Hub/eeharvest)
 
 An [Agricultural Research Federation] (AgReFed) project, the `eeharvest` package
-simplifies access to Google Earth Engine and its data catalog with a trio of
+simplifies access to Google Earth Engine and its data catalog with a quartet of
 convenient methods to collect, process and download data:
 
 - `preprocess()`: server-side processing, cloud and shadow masking, image
@@ -25,8 +25,19 @@ convenient methods to collect, process and download data:
   on data
 - `download()`: download data collection(s) to disk without limits on size or
   number of files
+- `map()`: preview assets automatically in an interactive map
 
-**Bonus**: use `map()` to preview assets in an interactive map (credit: `geemap`)
+**⚠ WARNING:** `eeharvest` does only a few things, but it does them well. The
+main objective is to provide a simple, *intuitive* interface to Google Earth
+Engine that is easy to use and understand for researchers who may *not* have a
+lot of experience with Python or Google Earth Engine, but they "just want to
+download some maps".  **Most importantly, `eeharvest` is designed to be used with
+`geodata-harvester` for fully automated and reproducible data extraction and
+processing**, but we understand the benefits of using it as a standalone package.
+
+If you are an advanced user, we recommend that you use the
+Earth Engine API directly (but see useful add-on packages such as `eemont` and
+`geemap` in our acknowledgements below).
 
 ## Why `eeharvest`?
 
@@ -36,12 +47,12 @@ agricultural data (and beyond) to Australian researchers and stakeholders.
 
 There are currently three packages that have been produced under AgReFed:
 
-- 🐍 `geodata-harvester`: a Python package for data extraction and processing from a
+- 🐍 `geodata-harvester` ([link]()): a Python package for data extraction and processing from a
   wide range of data sources in Australia, with support for Google Earth Engine
   via a dependency on `eeharvest` (see below)
 - 🐍 `eeharvest`: **this package**, which provides access to Google Earth Engine
   and is designed to work as a standalone package
-- `dataharvester`: an R package that replicates the functionality of
+- **R** `dataharvester` ([link]()): an R package that replicates the functionality of
   `geodata-harvester`, but with additional support for functional R programming
   and the tidyverse
 
