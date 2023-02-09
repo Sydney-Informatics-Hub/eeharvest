@@ -1,4 +1,15 @@
-## Unreleased (2023-02-03)
+## v1.6.0 (2023-02-09)
+
+### New feature:
+
+- raise error if running `preprocess()` on list of collections([`e184f7d`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/e184f7ddbdff566955d2788c2039ad9b8e3bebae)) (by Januar Harianto)
+
+### Bugs fixed:
+
+- TypeError when a certain key value is not a list object([`5eabdc9`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/5eabdc946acb15c4aa6845f61edbf456f8215330)) (by Januar Harianto), Closes: #7
+- compatibility with `geodata_harvester`'s `harvest.auto()`([`af0e27e`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/af0e27e3bb5a103163b327bcec80bc461fb7c15b)) (by Januar Harianto)
+
+## v1.5.0 (2023-02-06)
 
 ### New feature:
 
@@ -12,7 +23,7 @@
 ### Bugs fixed:
 
 - raise error when config file/object is not suitable([`30985a7`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/30985a72c3d1206be963c860803e48d082a6761f)) (by Januar Harianto)
-- download folder is blank (`NoneType`) due to faulty conditionals([`d524c63`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/d524c633a077a44d0447355a0eaa11a3cab41d6a)) (by Januar Harianto)
+- ddownload folder is blank (`NoneType`) due to faulty conditionals([`d524c63`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/d524c633a077a44d0447355a0eaa11a3cab41d6a)) (by Januar Harianto)
 - better feedback when initialisation step is complete([`ec0b138`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/ec0b13847a57f1ce1971bd9dc6fd10f54c33a118)) (by Januar Harianto)
 - recognise image collection string even if it is a list item([`49e887c`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/49e887ca6b6ea9ebe3f1014a4ee2e0d8ad4131fa)) (by Januar Harianto)
 - :bug: `collect()` now works with configs that are already imported as `dict` object([`e85e4bd`](https://github.com/Sydney-Informatics-Hub/eeharvest/commit/e85e4bd9cef195ecdfaf7ceefca380358912351b)) (by Januar Harianto)
