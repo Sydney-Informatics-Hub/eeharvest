@@ -1,7 +1,7 @@
 # eeharvest
 
 <p align="center">
-  <a href="https://github.com/Sydney-Informatics-Hub/eeharvest"><img src="https://raw.githubusercontent.com/Sydney-Informatics-Hub/eeharvest/main/docs/_static/eeharvest.png" alt="header" width="200"></a>
+  <a href="https://github.com/Sydney-Informatics-Hub/eeharvest"><img src="https://raw.githubusercontent.com/Sydney-Informatics-Hub/eeharvest/main/docs/_static/eeharvest.png" alt="header" width="300"></a>
 </p>
 
 [![Project generated with
@@ -35,9 +35,9 @@ download some maps".  **Most importantly, `eeharvest` is designed to be used wit
 `geodata-harvester` for fully automated and reproducible data extraction and
 processing**, but we understand the benefits of using it as a standalone package.
 
-If you are an advanced user, we recommend that you use the
-Earth Engine API directly (but see useful add-on packages such as `eemont` and
-`geemap` in our acknowledgements below).
+If `eeharvest` does not meet your needs, you can try the Earth Engine API
+directly (but see useful add-on packages such as `eemont` and `geemap` in our
+acknowledgements below).
 
 ## Why `eeharvest`?
 
