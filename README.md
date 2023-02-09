@@ -1,7 +1,7 @@
 # eeharvest
 
 <p align="center">
-  <a href="https://github.com/Sydney-Informatics-Hub/eeharvest"><img src="https://github.com/Sydney-Informatics-Hub/eeharvest/blob/main/docs/_static/eeharvest.png" alt="header" width="200"></a>
+  <a href="https://github.com/Sydney-Informatics-Hub/eeharvest"><img src="https://raw.githubusercontent.com/Sydney-Informatics-Hub/eeharvest/main/docs/_static/eeharvest.png" alt="header" width="200"></a>
 </p>
 
 [![Project generated with
