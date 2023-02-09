@@ -152,7 +152,7 @@ def test_map_requires_preprocess_to_run_first():
 
 def test_auto_just_works(tmp_path):
     img = harvester.auto(config="tests/data/template.yaml", outpath=tmp_path)
-    assert type(img) is harvester.collect
+    assert type(img) is harvester.AutoResult
 
     tif_exists = False
     for root, dirs, files in os.walk(tmp_path):
