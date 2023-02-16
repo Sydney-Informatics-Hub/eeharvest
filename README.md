@@ -94,11 +94,13 @@ img = eeharvest.collect(
 img.preprocess(mask_clouds=True, reduce="median", spectral="NDVI")
 
 # visualise (optional, but fun)
-img.map(bands="NDVI")
+img.map(bands="NDVI_median")
 
 # download to disk (defaults to a "downloads" folder in working directory)
 img.download(bands="NDVI")
 ```
+
+For more examples, please see the notebooks in the folder [notebooks](notebooks/) aa well as the tutorials for the Geodata-Harvester [workshop](https://sydney-informatics-hub.github.io/AgReFed-Workshop/pydocs/p20-advanced.html).
 
 ## Installation
 
