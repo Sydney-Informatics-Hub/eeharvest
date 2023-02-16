@@ -1,0 +1,55 @@
+# This settings file works for Google Earth Engine functionality on
+# the eeharvester notebook.
+
+# Define output directory
+outpath: download_auto
+
+# Bounding box: Left, Top, Right, Bottom
+target_bbox: [149.769345, -30.335861, 149.949173, -30.206271]
+
+# Reolution of data download in arcsecond
+target_res: 6.0
+
+#Select start date:
+date_min : 2022-10-01
+
+#Select end date:
+date_max : 2022-11-30
+
+target_sources:
+  GEE: 
+    preprocess:
+
+      ### collection as defined in the Earth Engine Catalog 
+      # NEW: for multiple collections please add list of collection names
+      collection: LANDSAT/LC09/C02/T1_L2
+
+      #### circular buffer in metres (optional)
+      buffer: null
+
+      #### convert buffer into square bounding box instead (optional)
+      bound: null
+
+      #### cloud masking option
+      mask_clouds: True
+
+      #### Set probability for mask cloud (between 0 to 1), optional
+      mask_probability: null
+
+      #### composite image based on summary stat provided
+      # e.g.: min, max, median, mean, stdDev (see GEE API references)
+      reduce: median
+
+      #### spectral indices to calculate via Awesome Spectral Indices site
+      # examples: NDVI, EVI, AVI, BI 
+      spectral:
+        - NDVI
+
+    download:
+      # set bands (either band names or spectral index names) If multiple collections are selected, 
+      # add for each collection a list of bands, e.g., [[NDVI, SR_B2],[SR_B23, SR_B4]]
+      bands: 
+        - NDVI
+        - SR_B2
+        - SR_B3
+        - SR_B4
