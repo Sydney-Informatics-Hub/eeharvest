@@ -534,7 +534,7 @@ class collect:
             msg.info("Please select one or more bands to download image:")
             msg.info(str(all_bands))
             return
-        else:
+        elif reduce is not None:
             # Match bands if they were modified by "reduce" in preprocess()
             new_bands = []
             for item in all_bands:
@@ -542,8 +542,10 @@ class collect:
                     if item.startswith(sub_item + "_"):
                         new_bands.append(item)
                         break
-            img = img.select(new_bands)
-            msg.info(f"Band(s) selected: {new_bands}")
+        else:
+            new_bands = bands
+        img = img.select(new_bands)
+        msg.info(f"Band(s) selected: {new_bands}")
 
         # Convert scale from arsec to meters (if from config file)
         if self.config is None:
