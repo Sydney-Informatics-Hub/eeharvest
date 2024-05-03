@@ -29,7 +29,7 @@ outpath: any(str(), null(), required=False)
 colname_lat: any(str(), null(), required=False)
 colname_lng: any(str(), null(), required=False)
 target_bbox: any(list(), null(), required=False)
-target_res: num(min=1)
+target_res: num(min=0.03)
 date_min: any(day(), int())
 date_max: any(day(), int(), required=False)
 target_sources:
